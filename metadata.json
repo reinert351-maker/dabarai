@@ -1,0 +1,10 @@
+{
+  "name": "DABAR AI - O Logos Digital",
+  "version": "1.0.0",
+  "description": "Ecossistema definitivo de estudo bíblico com IA, Arqueologia e 20 Vertentes Teológicas.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}

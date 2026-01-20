@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DABAR AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style id="logos-theme-engine">
+        :root {
+            --sacred-accent: #f59e0b;
+            --sacred-bg: #020617;
+            --sacred-bg-soft: #0f172a;
+            --sacred-text: #f8fafc;
+            --sacred-text-soft: #94a3b8;
+            --sacred-border: #1e293b;
+            --font-main: 'Inter', sans-serif;
+            --font-title: 'Playfair Display', serif;
+        }
+
+        .bg-sacred { background-color: var(--sacred-bg) !important; }
+        .bg-sacred-soft { background-color: var(--sacred-bg-soft) !important; }
+        .text-sacred { color: var(--sacred-text) !important; }
+        .text-sacred-soft { color: var(--sacred-text-soft) !important; }
+        .text-accent { color: var(--sacred-accent) !important; }
+        .bg-accent { background-color: var(--sacred-accent) !important; }
+        .border-accent { border-color: var(--sacred-accent) !important; }
+        .border-sacred { border-color: var(--sacred-border) !important; }
+        .shadow-accent { box-shadow: 0 10px 40px -10px var(--sacred-accent) !important; }
+        
+        .font-divine { font-family: var(--font-title) !important; }
+        .font-reading { font-family: var(--font-main) !important; }
+
+        body {
+            background-color: var(--sacred-bg);
+            color: var(--sacred-text);
+            font-family: var(--font-main);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Remove o retângulo branco ao clicar em botões/links no mobile */
+        * {
+            -webkit-tap-highlight-color: transparent;
+            outline-offset: 4px;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--sacred-bg); }
+        ::-webkit-scrollbar-thumb { background: var(--sacred-border); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--sacred-accent); }
+    </style>
+    <script>
+        function applyLogosTheme(config) {
+            const root = document.documentElement;
+            const accents = { 
+              amber: '#f59e0b', 
+              crimson: '#e11d48', 
+              purple: '#9333ea', 
+              emerald: '#10b981',
+              sky: '#0ea5e9',
+              rose: '#fb7185'
+            };
+            const themes = {
+                dark: { bg: '#020617', soft: '#0f172a', text: '#f8fafc', border: '#1e293b' },
+                sepia: { bg: '#1a1714', soft: '#2a241f', text: '#e5e1da', border: '#3d342d' },
+                gothic: { bg: '#050a14', soft: '#0a1428', text: '#d1d5db', border: '#1e293b' },
+                light: { bg: '#f8fafc', soft: '#f1f5f9', text: '#0f172a', border: '#e2e8f0' },
+                oasis: { bg: '#064e3b', soft: '#065f46', text: '#ecfdf5', border: '#059669' },
+                imperial: { bg: '#0c0a09', soft: '#1c1917', text: '#fafaf9', border: '#d6d3d1' },
+                papyrus: { bg: '#fdf6e3', soft: '#eee8d5', text: '#657b83', border: '#93a1a1' }
+            };
+
+            if (accents[config.accentColor]) root.style.setProperty('--sacred-accent', accents[config.accentColor]);
+            if (themes[config.theme]) {
+                const t = themes[config.theme];
+                root.style.setProperty('--sacred-bg', t.bg);
+                root.style.setProperty('--sacred-bg-soft', t.soft);
+                root.style.setProperty('--sacred-text', t.text);
+                root.style.setProperty('--sacred-border', t.border);
+            }
+            if (config.fontSize) {
+                const sizes = { small: '14px', medium: '16px', large: '20px' };
+                root.style.setProperty('font-size', sizes[config.fontSize]);
+            }
+            if (config.fontFamily === 'sans') {
+                root.style.setProperty('--font-main', "'Inter', sans-serif");
+                root.style.setProperty('--font-title', "'Inter', sans-serif");
+            } else {
+                root.style.setProperty('--font-main', "'Inter', sans-serif");
+                root.style.setProperty('--font-title', "'Playfair Display', serif");
+            }
+        }
+
+        try {
+            const saved = localStorage.getItem('logos_settings');
+            if (saved) applyLogosTheme(JSON.parse(saved));
+        } catch(e) {}
+    </script>
+<script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "@google/genai": "https://esm.sh/@google/genai@^1.37.0",
+    "d3": "https://esm.sh/d3@^7.9.0"
+  }
+}
+</script>
+</head>
+<body class="bg-sacred text-sacred">
+    <div id="root"></div>
+</body>
+</html>

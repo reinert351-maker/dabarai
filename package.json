@@ -1,0 +1,36 @@
+
+{
+  "name": "dabar-ai-revolucao-biblica",
+  "version": "1.0.0",
+  "description": "Plataforma revolucionária de estudo bíblico e teológico com inteligência artificial.",
+  "main": "index.tsx",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "keywords": [
+    "bible",
+    "theology",
+    "ai",
+    "gemini",
+    "react",
+    "education"
+  ],
+  "author": "DABAR Team",
+  "license": "MIT",
+  "dependencies": {
+    "@google/genai": "^1.37.0",
+    "lucide-react": "^0.562.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "d3": "^7.9.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "typescript": "^5.0.0",
+    "tailwindcss": "^3.0.0"
+  }
+}
