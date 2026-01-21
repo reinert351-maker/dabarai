@@ -1,10 +1,20 @@
 
 import { GoogleGenAI, Type, Modality } from "@google/genai";
 
+const getAPIKey = () => {
+    // Tenta pegar de process.env (Netlify) ou do shim global
+    const key = (typeof process !== 'undefined' && process.env.API_KEY) || 
+                (window as any).process?.env?.API_KEY || 
+                "";
+    return key;
+};
+
 // General response generator for text prompts
 export const getGeminiResponse = async (prompt: string, history: { role: 'user' | 'model', parts: { text: string }[] }[] = []) => {
-  // Guideline: Create a new GoogleGenAI instance right before making an API call
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const apiKey = getAPIKey();
+  if (!apiKey) return "DABAR AI: Chave de API não configurada no Netlify.";
+  
+  const ai = new GoogleGenAI({ apiKey });
   
   try {
     const response = await ai.models.generateContent({
@@ -23,13 +33,14 @@ export const getGeminiResponse = async (prompt: string, history: { role: 'user' 
     return response.text || "O Logos está em silêncio. Tente novamente.";
   } catch (error) {
     console.error("Gemini Error:", error);
-    return "Erro de conexão com o Logos AI.";
+    return "Erro de conexão com o Logos AI. Verifique a chave de API.";
   }
 };
 
-// Refraction Prism analysis
 export const refractPrism = async (reference: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const apiKey = getAPIKey();
+  if (!apiKey) return null;
+  const ai = new GoogleGenAI({ apiKey });
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
@@ -54,9 +65,10 @@ export const refractPrism = async (reference: string) => {
   }
 };
 
-// Fetch Bible verses in JSON format
 export const getBibleVerses = async (book: string, chapter: number, translation: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const apiKey = getAPIKey();
+  if (!apiKey) return [];
+  const ai = new GoogleGenAI({ apiKey });
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
@@ -82,16 +94,16 @@ export const getBibleVerses = async (book: string, chapter: number, translation:
   }
 };
 
-// Image generator for biblical scenes
 export const generateBibleImage = async (prompt: string): Promise<string | null> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const apiKey = getAPIKey();
+  if (!apiKey) return null;
+  const ai = new GoogleGenAI({ apiKey });
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash-image',
       contents: { parts: [{ text: `Sacred biblical art: ${prompt}. Cinematic lighting, historically accurate.` }] },
       config: { imageConfig: { aspectRatio: "16:9" } }
     });
-    // Find the image part, do not assume it is the first part.
     for (const part of response.candidates?.[0]?.content?.parts || []) {
       if (part.inlineData) return `data:image/png;base64,${part.inlineData.data}`;
     }
@@ -101,9 +113,10 @@ export const generateBibleImage = async (prompt: string): Promise<string | null>
   }
 };
 
-// Maps search with grounding (Fix for components/InteractiveMap.tsx)
 export const searchBiblicalPlaces = async (query: string, userLocation?: { lat: number, lng: number }) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const apiKey = getAPIKey();
+  if (!apiKey) return null;
+  const ai = new GoogleGenAI({ apiKey });
   try {
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
@@ -127,9 +140,10 @@ export const searchBiblicalPlaces = async (query: string, userLocation?: { lat: 
   }
 };
 
-// Insights for MyStudies (Fix for components/MyStudies.tsx)
 export const getScriptoriumInsights = async (prompt: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const apiKey = getAPIKey();
+  if (!apiKey) return null;
+  const ai = new GoogleGenAI({ apiKey });
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
@@ -153,9 +167,10 @@ export const getScriptoriumInsights = async (prompt: string) => {
   }
 };
 
-// Scanning manuscripts (Fix for components/DabarVision.tsx)
 export const scanManuscript = async (base64: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const apiKey = getAPIKey();
+  if (!apiKey) return "DABAR AI: Chave não encontrada.";
+  const ai = new GoogleGenAI({ apiKey });
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
@@ -172,9 +187,10 @@ export const scanManuscript = async (base64: string) => {
   }
 };
 
-// Textual variants comparison (Fix for components/DabarVariants.tsx)
 export const compareVariants = async (reference: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const apiKey = getAPIKey();
+  if (!apiKey) return "DABAR AI: Chave não encontrada.";
+  const ai = new GoogleGenAI({ apiKey });
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
@@ -187,9 +203,10 @@ export const compareVariants = async (reference: string) => {
   }
 };
 
-// Video generation with Veo 3.1 (Fix for components/Archeology360.tsx)
 export const generateArcheologyVideo = async (location: string, description: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const apiKey = getAPIKey();
+  if (!apiKey) return null;
+  const ai = new GoogleGenAI({ apiKey });
   try {
     let operation = await ai.models.generateVideos({
       model: 'veo-3.1-fast-generate-preview',
@@ -205,16 +222,17 @@ export const generateArcheologyVideo = async (location: string, description: str
       operation = await ai.operations.getVideosOperation({ operation: operation });
     }
     const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
-    return `${downloadLink}&key=${process.env.API_KEY}`;
+    return `${downloadLink}&key=${apiKey}`;
   } catch (error) {
     console.error("Video Generation Error:", error);
     return null;
   }
 };
 
-// Harmonizing gospels (Fix for components/DabarHarmony.tsx)
 export const harmonizeGospels = async (passage: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const apiKey = getAPIKey();
+  if (!apiKey) return "DABAR AI: Chave não encontrada.";
+  const ai = new GoogleGenAI({ apiKey });
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
@@ -227,9 +245,10 @@ export const harmonizeGospels = async (passage: string) => {
   }
 };
 
-// Virtual council simulation (Fix for components/DabarDebates.tsx)
 export const simulateCouncil = async (t1: string, t2: string, topic: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const apiKey = getAPIKey();
+  if (!apiKey) return "DABAR AI: Chave não encontrada.";
+  const ai = new GoogleGenAI({ apiKey });
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
@@ -242,9 +261,10 @@ export const simulateCouncil = async (t1: string, t2: string, topic: string) => 
   }
 };
 
-// Biblical network mapping (Fix for components/DabarNetwork.tsx)
 export const mapBiblicalNetwork = async (reference: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const apiKey = getAPIKey();
+  if (!apiKey) return "DABAR AI: Chave não encontrada.";
+  const ai = new GoogleGenAI({ apiKey });
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
@@ -257,9 +277,10 @@ export const mapBiblicalNetwork = async (reference: string) => {
   }
 };
 
-// Sensory experience (Fix for components/DabarAtlas.tsx)
 export const getSensoryExperience = async (location: string, date: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const apiKey = getAPIKey();
+  if (!apiKey) return "DABAR AI: Chave não encontrada.";
+  const ai = new GoogleGenAI({ apiKey });
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
@@ -272,9 +293,10 @@ export const getSensoryExperience = async (location: string, date: string) => {
   }
 };
 
-// Meditative audio with TTS (Fix for components/DabarMelos.tsx)
 export const generateDabarMelos = async (text: string, voiceName: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const apiKey = getAPIKey();
+  if (!apiKey) return null;
+  const ai = new GoogleGenAI({ apiKey });
   try {
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-preview-tts",

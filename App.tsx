@@ -69,13 +69,6 @@ const App: React.FC = () => {
     localStorage.setItem('dabar_user_xp', userXp.toString());
   }, [userXp]);
 
-  useEffect(() => {
-    localStorage.setItem('logos_settings', JSON.stringify(settings));
-    if ((window as any).applyLogosTheme) {
-      (window as any).applyLogosTheme(settings);
-    }
-  }, [settings]);
-
   const handleActivate = (key: string) => {
     localStorage.setItem('dabar_license_key', key);
     setIsActivated(true);
