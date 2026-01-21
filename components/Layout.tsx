@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { ViewMode } from '../types';
-import { NAV_ITEMS, TRANSLATIONS } from '../constants';
+import { ViewMode } from '../types.ts';
+import { NAV_ITEMS, TRANSLATIONS } from '../constants.tsx';
 import { ChevronDown, Menu, X, User } from 'lucide-react';
 
 interface LayoutProps {
@@ -39,7 +39,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeView, onViewChange, use
   return (
     <div className="flex flex-col h-screen bg-sacred overflow-hidden text-sacred font-reading">
       
-      {/* HEADER DINÂMICO - Respeita as cores Brand customizadas */}
+      {/* HEADER DINÂMICO */}
       <header className="h-20 flex items-center justify-between px-4 md:px-8 bg-sacred-soft/80 border-b border-sacred shrink-0 z-[100] backdrop-blur-xl relative">
         <div className="flex items-center space-x-4 md:space-x-8">
           <div className="flex items-center gap-3 md:gap-4 relative" ref={dropdownRef}>

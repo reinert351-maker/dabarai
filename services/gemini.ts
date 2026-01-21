@@ -1,18 +1,10 @@
 
 import { GoogleGenAI, Type, Modality } from "@google/genai";
 
-const getAIClient = () => {
-  const apiKey = process.env.API_KEY;
-  if (!apiKey || apiKey === "") {
-    console.warn("DABAR AI: API_KEY não configurada. Algumas funções podem não funcionar.");
-    return null;
-  }
-  return new GoogleGenAI({ apiKey });
-};
-
+// General response generator for text prompts
 export const getGeminiResponse = async (prompt: string, history: { role: 'user' | 'model', parts: { text: string }[] }[] = []) => {
-  const ai = getAIClient();
-  if (!ai) return "Por favor, configure sua API_KEY para usar o Mentor IA.";
+  // Guideline: Create a new GoogleGenAI instance right before making an API call
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   
   try {
     const response = await ai.models.generateContent({
@@ -23,21 +15,21 @@ export const getGeminiResponse = async (prompt: string, history: { role: 'user' 
       ],
       config: {
         systemInstruction: `Você é o DABAR AI, o Assistente Espiritual mais avançado do mundo. 
-        O nome DABAR vem do hebraico "דber", que significa "Palavra".
-        Seu objetivo é auxiliar usuários no estudo bíblico profundo com foco em exegese e contexto.`,
+        Seu objetivo é auxiliar usuários no estudo bíblico profundo com foco em exegese e contexto histórico.`,
         temperature: 0.7,
         thinkingConfig: { thinkingBudget: 2000 }
       },
     });
-    return response.text;
+    return response.text || "O Logos está em silêncio. Tente novamente.";
   } catch (error) {
-    return "Erro no DABAR AI. Verifique sua conexão ou cota da API.";
+    console.error("Gemini Error:", error);
+    return "Erro de conexão com o Logos AI.";
   }
 };
 
+// Refraction Prism analysis
 export const refractPrism = async (reference: string) => {
-  const ai = getAIClient();
-  if (!ai) return null;
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
@@ -58,14 +50,13 @@ export const refractPrism = async (reference: string) => {
     });
     return JSON.parse(response.text || "{}");
   } catch (error) {
-    console.error("Prism Error:", error);
     return null;
   }
 };
 
+// Fetch Bible verses in JSON format
 export const getBibleVerses = async (book: string, chapter: number, translation: string) => {
-  const ai = getAIClient();
-  if (!ai) return [];
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
@@ -87,144 +78,20 @@ export const getBibleVerses = async (book: string, chapter: number, translation:
     });
     return JSON.parse(response.text || "[]");
   } catch (error) {
-    console.error("Error fetching verses:", error);
     return [];
   }
 };
 
-export const searchBiblicalPlaces = async (query: string, location?: { lat: number, lng: number }) => {
-  const ai = getAIClient();
-  if (!ai) return null;
-  try {
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: `Forneça informações arqueológicas e históricas profundas sobre o lugar bíblico: ${query}.`,
-      config: {
-        tools: [{ googleMaps: {} }],
-        ...(location && {
-          toolConfig: {
-            retrievalConfig: {
-              latLng: {
-                latitude: location.lat,
-                longitude: location.lng
-              }
-            }
-          }
-        })
-      },
-    });
-    return {
-      text: response.text,
-      grounding: response.candidates?.[0]?.groundingMetadata?.groundingChunks
-    };
-  } catch (error) {
-    console.error("Error searching places:", error);
-    return null;
-  }
-};
-
-export const generateArcheologyVideo = async (location: string, description: string): Promise<string | null> => {
-  const ai = getAIClient();
-  if (!ai) return null;
-  try {
-    let operation = await ai.models.generateVideos({
-      model: 'veo-3.1-fast-generate-preview',
-      prompt: `Cinematic archaeological reconstruction video of ${location}. ${description}. 4k, hyper-realistic, historical accuracy.`,
-      config: {
-        numberOfVideos: 1,
-        resolution: '720p',
-        aspectRatio: '16:9'
-      }
-    });
-
-    while (!operation.done) {
-      await new Promise(resolve => setTimeout(resolve, 10000));
-      operation = await ai.operations.getVideosOperation({ operation: operation });
-    }
-
-    const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
-    if (downloadLink) {
-      return `${downloadLink}&key=${process.env.API_KEY}`;
-    }
-    return null;
-  } catch (error) {
-    console.error("Video Generation Error:", error);
-    return null;
-  }
-};
-
-export const getScriptoriumInsights = async (context: string) => {
-  const ai = getAIClient();
-  if (!ai) return null;
-  try {
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-pro-preview',
-      contents: `Analise este contexto de estudo: "${context}". 
-      Forneça insights exegéticos e procure conexões semânticas no histórico fornecido.
-      Retorne em JSON: 
-      {
-        "Conexão Bíblica": "string",
-        "Eco Histórico": "string",
-        "Raiz Original": "string",
-        "Memória Semântica": "string relacionando a notas anteriores se houver contexto"
-      }`,
-      config: { 
-        responseMimeType: "application/json"
-      }
-    });
-    return JSON.parse(response.text || "null");
-  } catch (error) {
-    return null;
-  }
-};
-
-export const mapBiblicalNetwork = async (reference: string) => {
-  const ai = getAIClient();
-  if (!ai) return "Chave de API necessária.";
-  try {
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-pro-preview',
-      contents: `Analise o versículo ${reference}. Mapeie conexões tipológicas e intertextuais. 
-      Retorne uma lista de conexões no formato 'Referência: Descrição curta'.`,
-    });
-    return response.text;
-  } catch (error) {
-    return "Erro ao mapear conexões.";
-  }
-};
-
-export const generateDabarMelos = async (text: string, voiceName: 'Kore' | 'Puck' | 'Charon' | 'Fenrir' = 'Kore') => {
-  const ai = getAIClient();
-  if (!ai) return null;
-  try {
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-preview-tts",
-      contents: [{ parts: [{ text: `Leia com solenidade e atmosfera sagrada: ${text}` }] }],
-      config: {
-        responseModalities: [Modality.AUDIO],
-        speechConfig: {
-          voiceConfig: {
-            prebuiltVoiceConfig: { voiceName },
-          },
-        },
-      },
-    });
-    return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-  } catch (error) {
-    console.error("Melos Error:", error);
-    return null;
-  }
-};
-
+// Image generator for biblical scenes
 export const generateBibleImage = async (prompt: string): Promise<string | null> => {
-  const ai = getAIClient();
-  if (!ai) return null;
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash-image',
-      contents: { parts: [{ text: `Sacred art: ${prompt}. Cinematic lighting, oil painting style.` }] },
+      contents: { parts: [{ text: `Sacred biblical art: ${prompt}. Cinematic lighting, historically accurate.` }] },
       config: { imageConfig: { aspectRatio: "16:9" } }
     });
+    // Find the image part, do not assume it is the first part.
     for (const part of response.candidates?.[0]?.content?.parts || []) {
       if (part.inlineData) return `data:image/png;base64,${part.inlineData.data}`;
     }
@@ -234,16 +101,68 @@ export const generateBibleImage = async (prompt: string): Promise<string | null>
   }
 };
 
+// Maps search with grounding (Fix for components/InteractiveMap.tsx)
+export const searchBiblicalPlaces = async (query: string, userLocation?: { lat: number, lng: number }) => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: `Forneça informações arqueológicas e geográficas detalhadas sobre ${query} no contexto bíblico.`,
+      config: {
+        tools: [{ googleMaps: {} }],
+        toolConfig: {
+          retrievalConfig: {
+            latLng: userLocation ? { latitude: userLocation.lat, longitude: userLocation.lng } : undefined
+          }
+        }
+      },
+    });
+    return {
+      text: response.text,
+      grounding: response.candidates?.[0]?.groundingMetadata?.groundingChunks
+    };
+  } catch (error) {
+    console.error("Maps Search Error:", error);
+    return null;
+  }
+};
+
+// Insights for MyStudies (Fix for components/MyStudies.tsx)
+export const getScriptoriumInsights = async (prompt: string) => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  try {
+    const response = await ai.models.generateContent({
+      model: 'gemini-3-flash-preview',
+      contents: `Gere insights para o scriptorium com base no seguinte: ${prompt}`,
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            "Conexão Bíblica": { type: Type.STRING },
+            "Eco Histórico": { type: Type.STRING },
+            "Raiz Original": { type: Type.STRING }
+          },
+          required: ["Conexão Bíblica", "Eco Histórico", "Raiz Original"]
+        }
+      }
+    });
+    return JSON.parse(response.text || "{}");
+  } catch (error) {
+    return null;
+  }
+};
+
+// Scanning manuscripts (Fix for components/DabarVision.tsx)
 export const scanManuscript = async (base64: string) => {
-  const ai = getAIClient();
-  if (!ai) return "Chave de API necessária.";
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: {
         parts: [
-          { inlineData: { mimeType: 'image/jpeg', data: base64 } },
-          { text: "Analise este manuscrito ou texto bíblico. Realize uma exegese, identifique o idioma e forneça o contexto histórico e acadêmico." }
+          { inlineData: { data: base64, mimeType: 'image/jpeg' } },
+          { text: "Analise este manuscrito bíblico ou página da Bíblia. Forneça transcrição, contexto histórico e análise exegética." }
         ]
       }
     });
@@ -253,41 +172,54 @@ export const scanManuscript = async (base64: string) => {
   }
 };
 
+// Textual variants comparison (Fix for components/DabarVariants.tsx)
 export const compareVariants = async (reference: string) => {
-  const ai = getAIClient();
-  if (!ai) return "Chave de API necessária.";
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
-      contents: `Compare detalhadamente as variantes textuais de ${reference} entre o Codex Sinaiticus, Vaticanus e o Texto Recebido.`
+      contents: `Realize uma análise de crítica textual exaustiva para: ${reference}. Compare variantes entre Codex Sinaiticus, Vaticanus e Texto Recebido.`,
+      config: { thinkingConfig: { thinkingBudget: 4000 } }
     });
     return response.text;
   } catch (error) {
-    return "Erro ao comparar variantes.";
+    return "Erro na comparação de variantes.";
   }
 };
 
-export const simulateCouncil = async (theologian1: string, theologian2: string, topic: string) => {
-  const ai = getAIClient();
-  if (!ai) return "Chave de API necessária.";
+// Video generation with Veo 3.1 (Fix for components/Archeology360.tsx)
+export const generateArcheologyVideo = async (location: string, description: string) => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   try {
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-pro-preview',
-      contents: `Simule um debate teológico entre ${theologian1} e ${theologian2} sobre: "${topic}".`
+    let operation = await ai.models.generateVideos({
+      model: 'veo-3.1-fast-generate-preview',
+      prompt: `Cinematic archaeological reconstruction of ${location}. ${description}`,
+      config: {
+        numberOfVideos: 1,
+        resolution: '720p',
+        aspectRatio: '16:9'
+      }
     });
-    return response.text;
+    while (!operation.done) {
+      await new Promise(resolve => setTimeout(resolve, 10000));
+      operation = await ai.operations.getVideosOperation({ operation: operation });
+    }
+    const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
+    return `${downloadLink}&key=${process.env.API_KEY}`;
   } catch (error) {
-    return "Erro ao convocar o concílio.";
+    console.error("Video Generation Error:", error);
+    return null;
   }
 };
 
+// Harmonizing gospels (Fix for components/DabarHarmony.tsx)
 export const harmonizeGospels = async (passage: string) => {
-  const ai = getAIClient();
-  if (!ai) return "Chave de API necessária.";
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
-      contents: `Compare o relato de "${passage}" nos quatro Evangelhos.`,
+      contents: `Harmonize os relatos dos Evangelhos para a passagem ou tema: ${passage}.`,
+      config: { thinkingConfig: { thinkingBudget: 4000 } }
     });
     return response.text;
   } catch (error) {
@@ -295,16 +227,70 @@ export const harmonizeGospels = async (passage: string) => {
   }
 };
 
-export const getSensoryExperience = async (location: string, date: string) => {
-  const ai = getAIClient();
-  if (!ai) return "Chave de API necessária.";
+// Virtual council simulation (Fix for components/DabarDebates.tsx)
+export const simulateCouncil = async (t1: string, t2: string, topic: string) => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
-      contents: `Descreva uma experiência sensorial imersiva em ${location} no ano/período de ${date}.`
+      contents: `Simule um debate teológico de alto nível entre ${t1} e ${t2} sobre o tema: ${topic}.`,
+      config: { thinkingConfig: { thinkingBudget: 8000 } }
     });
     return response.text;
   } catch (error) {
-    return "Erro ao carregar crônica sensorial.";
+    return "Erro ao simular concílio.";
+  }
+};
+
+// Biblical network mapping (Fix for components/DabarNetwork.tsx)
+export const mapBiblicalNetwork = async (reference: string) => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  try {
+    const response = await ai.models.generateContent({
+      model: 'gemini-3-pro-preview',
+      contents: `Mapeie a rede intertextual de ${reference}. Identifique conexões entre Antigo e Novo Testamento.`,
+      config: { thinkingConfig: { thinkingBudget: 4000 } }
+    });
+    return response.text;
+  } catch (error) {
+    return "Erro ao mapear rede.";
+  }
+};
+
+// Sensory experience (Fix for components/DabarAtlas.tsx)
+export const getSensoryExperience = async (location: string, date: string) => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  try {
+    const response = await ai.models.generateContent({
+      model: 'gemini-3-pro-preview',
+      contents: `Descreva em detalhes sensoriais (cheiro, clima, sons, visão) estar em ${location} na data/época: ${date}.`,
+      config: { thinkingConfig: { thinkingBudget: 4000 } }
+    });
+    return response.text;
+  } catch (error) {
+    return "Erro ao obter experiência sensorial.";
+  }
+};
+
+// Meditative audio with TTS (Fix for components/DabarMelos.tsx)
+export const generateDabarMelos = async (text: string, voiceName: string) => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash-preview-tts",
+      contents: [{ parts: [{ text: `Narrate with a sacred and atmospheric tone: ${text}` }] }],
+      config: {
+        responseModalities: [Modality.AUDIO],
+        speechConfig: {
+          voiceConfig: {
+            prebuiltVoiceConfig: { voiceName: voiceName },
+          },
+        },
+      },
+    });
+    return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+  } catch (error) {
+    console.error("TTS Error:", error);
+    return null;
   }
 };

@@ -71,12 +71,38 @@
             animation: spin 1s linear infinite;
         }
 
+        #error-display {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: #450a0a;
+            color: #fecaca;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-family: monospace;
+            z-index: 10000;
+            display: none;
+            border: 1px solid #991b1b;
+        }
+
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
     <script>
-        // SHIM CRITICAL: Define o objeto process antes de qualquer módulo carregar
-        window.process = { env: { API_KEY: "" } };
+        // SHIM CRITICAL: Define o objeto process para evitar erro "process is not defined"
+        window.process = window.process || { env: { API_KEY: "" } };
         
+        // Captura de erros global para debug na tela preta
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            const display = document.getElementById('error-display');
+            if (display) {
+                display.style.display = 'block';
+                display.innerHTML = 'Erro detectado: ' + msg + ' <br>Linha: ' + lineNo + ':' + columnNo;
+            }
+            return false;
+        };
+
         window.addEventListener('load', () => {
             const loader = document.getElementById('logos-loader');
             if (loader) {
@@ -105,8 +131,10 @@
         <div class="loader-ring"></div>
         <p style="color: #f59e0b; font-family: 'Playfair Display', serif; margin-top: 20px; letter-spacing: 5px; font-weight: bold; text-transform: uppercase; font-size: 10px;">DABAR AI: Invocando o Logos</p>
     </div>
+    
+    <div id="error-display"></div>
     <div id="root"></div>
-    <!-- O Netlify precisa que o entry point seja processado corretamente -->
+
     <script type="module" src="index.tsx"></script>
 </body>
 </html>
