@@ -1,30 +1,30 @@
 
 import React, { useState, useEffect } from 'react';
-import Layout from './components/Layout';
-import BibleReader from './components/BibleReader';
-import AIAssistant from './components/AIAssistant';
-import InteractiveMap from './components/InteractiveMap';
-import TheologyLibrary from './components/TheologyLibrary';
-import Gamification from './components/Gamification';
-import Timeline from './components/Timeline';
-import Community from './components/Community';
-import Settings from './components/Settings';
-import MyStudies from './components/MyStudies';
-import Lexicon from './components/Lexicon';
-import Academy from './components/Academy';
-import DabarVision from './components/DabarVision';
-import DabarVoice from './components/DabarVoice';
-import DabarVariants from './components/DabarVariants';
-import Archeology360 from './components/Archeology360';
-import DabarHarmony from './components/DabarHarmony';
-import DabarDebates from './components/DabarDebates';
-import DabarNetwork from './components/DabarNetwork';
-import DabarAtlas from './components/DabarAtlas';
-import DabarMelos from './components/DabarMelos';
-import DabarPrism from './components/DabarPrism';
-import ActivationGate from './components/ActivationGate';
-import { ViewMode, StudyItem } from './types';
-import { TRANSLATIONS } from './constants';
+import Layout from './components/Layout.tsx';
+import BibleReader from './components/BibleReader.tsx';
+import AIAssistant from './components/AIAssistant.tsx';
+import InteractiveMap from './components/InteractiveMap.tsx';
+import TheologyLibrary from './components/TheologyLibrary.tsx';
+import Gamification from './components/Gamification.tsx';
+import Timeline from './components/Timeline.tsx';
+import Community from './components/Community.tsx';
+import Settings from './components/Settings.tsx';
+import MyStudies from './components/MyStudies.tsx';
+import Lexicon from './components/Lexicon.tsx';
+import Academy from './components/Academy.tsx';
+import DabarVision from './components/DabarVision.tsx';
+import DabarVoice from './components/DabarVoice.tsx';
+import DabarVariants from './components/DabarVariants.tsx';
+import Archeology360 from './components/Archeology360.tsx';
+import DabarHarmony from './components/DabarHarmony.tsx';
+import DabarDebates from './components/DabarDebates.tsx';
+import DabarNetwork from './components/DabarNetwork.tsx';
+import DabarAtlas from './components/DabarAtlas.tsx';
+import DabarMelos from './components/DabarMelos.tsx';
+import DabarPrism from './components/DabarPrism.tsx';
+import ActivationGate from './components/ActivationGate.tsx';
+import { ViewMode, StudyItem } from './types.ts';
+import { TRANSLATIONS } from './constants.tsx';
 import { Sparkles, Trophy, Zap, BookmarkPlus } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -44,7 +44,6 @@ const App: React.FC = () => {
   
   const [settings, setSettings] = useState(() => {
     const saved = localStorage.getItem('logos_settings');
-    // Forçamos o padrão 'light' (Luz Divina) se não houver configuração anterior
     return saved ? JSON.parse(saved) : {
       theme: 'light',
       accentColor: 'amber',

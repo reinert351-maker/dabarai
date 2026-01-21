@@ -1,8 +1,19 @@
 
 import { GoogleGenAI, Type, Modality } from "@google/genai";
 
+const getAIClient = () => {
+  const apiKey = process.env.API_KEY;
+  if (!apiKey || apiKey === "") {
+    console.warn("DABAR AI: API_KEY não configurada. Algumas funções podem não funcionar.");
+    return null;
+  }
+  return new GoogleGenAI({ apiKey });
+};
+
 export const getGeminiResponse = async (prompt: string, history: { role: 'user' | 'model', parts: { text: string }[] }[] = []) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = getAIClient();
+  if (!ai) return "Por favor, configure sua API_KEY para usar o Mentor IA.";
+  
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
@@ -25,7 +36,8 @@ export const getGeminiResponse = async (prompt: string, history: { role: 'user' 
 };
 
 export const refractPrism = async (reference: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = getAIClient();
+  if (!ai) return null;
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
@@ -52,7 +64,8 @@ export const refractPrism = async (reference: string) => {
 };
 
 export const getBibleVerses = async (book: string, chapter: number, translation: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = getAIClient();
+  if (!ai) return [];
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
@@ -80,7 +93,8 @@ export const getBibleVerses = async (book: string, chapter: number, translation:
 };
 
 export const searchBiblicalPlaces = async (query: string, location?: { lat: number, lng: number }) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = getAIClient();
+  if (!ai) return null;
   try {
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
@@ -110,8 +124,8 @@ export const searchBiblicalPlaces = async (query: string, location?: { lat: numb
 };
 
 export const generateArcheologyVideo = async (location: string, description: string): Promise<string | null> => {
-  // Para modelos VEO, instanciamos a cada chamada para garantir o uso da chave mais recente do usuário se necessário
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = getAIClient();
+  if (!ai) return null;
   try {
     let operation = await ai.models.generateVideos({
       model: 'veo-3.1-fast-generate-preview',
@@ -135,16 +149,13 @@ export const generateArcheologyVideo = async (location: string, description: str
     return null;
   } catch (error) {
     console.error("Video Generation Error:", error);
-    if (error instanceof Error && error.message.includes("Requested entity was not found")) {
-      // Re-trigger key selection if applicable
-      if (window.aistudio) await window.aistudio.openSelectKey();
-    }
     return null;
   }
 };
 
 export const getScriptoriumInsights = async (context: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = getAIClient();
+  if (!ai) return null;
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
@@ -168,7 +179,8 @@ export const getScriptoriumInsights = async (context: string) => {
 };
 
 export const mapBiblicalNetwork = async (reference: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = getAIClient();
+  if (!ai) return "Chave de API necessária.";
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
@@ -182,7 +194,8 @@ export const mapBiblicalNetwork = async (reference: string) => {
 };
 
 export const generateDabarMelos = async (text: string, voiceName: 'Kore' | 'Puck' | 'Charon' | 'Fenrir' = 'Kore') => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = getAIClient();
+  if (!ai) return null;
   try {
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-preview-tts",
@@ -204,7 +217,8 @@ export const generateDabarMelos = async (text: string, voiceName: 'Kore' | 'Puck
 };
 
 export const generateBibleImage = async (prompt: string): Promise<string | null> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = getAIClient();
+  if (!ai) return null;
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash-image',
@@ -221,7 +235,8 @@ export const generateBibleImage = async (prompt: string): Promise<string | null>
 };
 
 export const scanManuscript = async (base64: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = getAIClient();
+  if (!ai) return "Chave de API necessária.";
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
@@ -239,7 +254,8 @@ export const scanManuscript = async (base64: string) => {
 };
 
 export const compareVariants = async (reference: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = getAIClient();
+  if (!ai) return "Chave de API necessária.";
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
@@ -252,7 +268,8 @@ export const compareVariants = async (reference: string) => {
 };
 
 export const simulateCouncil = async (theologian1: string, theologian2: string, topic: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = getAIClient();
+  if (!ai) return "Chave de API necessária.";
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
@@ -265,7 +282,8 @@ export const simulateCouncil = async (theologian1: string, theologian2: string, 
 };
 
 export const harmonizeGospels = async (passage: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = getAIClient();
+  if (!ai) return "Chave de API necessária.";
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',
@@ -278,7 +296,8 @@ export const harmonizeGospels = async (passage: string) => {
 };
 
 export const getSensoryExperience = async (location: string, date: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const ai = getAIClient();
+  if (!ai) return "Chave de API necessária.";
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-pro-preview',

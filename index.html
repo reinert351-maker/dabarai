@@ -9,7 +9,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" href="manifest.json">
     
-    <title>DABAR AI</title>
+    <title>DABAR AI - O Logos Digital</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style id="logos-theme-engine">
@@ -37,90 +37,55 @@
         .border-brand { border-color: var(--sacred-brand) !important; }
         .border-sacred { border-color: var(--sacred-border) !important; }
         
-        /* Tipografia Dinâmica Universal */
-        h1, h2, h3, .font-divine, .font-serif, .font-title { 
-            font-family: var(--font-title) !important; 
-        }
-        
-        p, span, div, input, button, .font-reading, .font-sans { 
-            font-family: var(--font-main) !important; 
-        }
+        h1, h2, h3, .font-divine, .font-serif, .font-title { font-family: var(--font-title) !important; }
+        p, span, div, input, button, .font-reading, .font-sans { font-family: var(--font-main) !important; }
 
         body {
             background-color: var(--sacred-bg);
             color: var(--sacred-text);
             font-family: var(--font-main);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            margin: 0;
+            padding: 0;
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
         }
 
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--sacred-bg); }
-        ::-webkit-scrollbar-thumb { background: var(--sacred-border); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--sacred-accent); }
+        #logos-loader {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #020617;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader-ring {
+            width: 80px;
+            height: 80px;
+            border: 4px solid #0f172a;
+            border-top: 4px solid #f59e0b;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
     <script>
-        function applyLogosTheme(config) {
-            const root = document.documentElement;
-            const colors = { 
-              amber: '#f59e0b', crimson: '#e11d48', purple: '#9333ea', 
-              emerald: '#10b981', sky: '#0ea5e9', rose: '#fb7185',
-              gold: '#D4AF37', silver: '#C0C0C0', white: '#ffffff',
-              indigo: '#6366f1', orange: '#f97316'
-            };
-            const themes = {
-                dark: { bg: '#020617', soft: '#0f172a', text: '#f8fafc', border: '#1e293b' },
-                sepia: { bg: '#1a1714', soft: '#2a241f', text: '#e5e1da', border: '#3d342d' },
-                gothic: { bg: '#050a14', soft: '#0a1428', text: '#d1d5db', border: '#1e293b' },
-                light: { bg: '#f8fafc', soft: '#f1f5f9', text: '#0f172a', border: '#e2e8f0' },
-                midnight: { bg: '#000000', soft: '#09090b', text: '#fafafa', border: '#27272a' },
-                forest: { bg: '#052e16', soft: '#064e3b', text: '#ecfdf5', border: '#065f46' },
-                royal: { bg: '#2e1065', soft: '#4c1d95', text: '#f5f3ff', border: '#5b21b6' },
-                ocean: { bg: '#0c4a6e', soft: '#075985', text: '#f0f9ff', border: '#0369a1' }
-            };
-
-            // Cor de Destaque/Marca
-            if (config.brandColor && colors[config.brandColor]) {
-                root.style.setProperty('--sacred-brand', colors[config.brandColor]);
-                root.style.setProperty('--sacred-accent', colors[config.brandColor]);
-            } else if (config.accentColor && colors[config.accentColor]) {
-                root.style.setProperty('--sacred-accent', colors[config.accentColor]);
-                root.style.setProperty('--sacred-brand', colors[config.accentColor]);
+        // SHIM CRITICAL: Define o objeto process antes de qualquer módulo carregar
+        window.process = { env: { API_KEY: "" } };
+        
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('logos-loader');
+            if (loader) {
+                setTimeout(() => {
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.remove(), 500);
+                }, 1500);
             }
-
-            // Tema base
-            if (themes[config.theme]) {
-                const t = themes[config.theme];
-                root.style.setProperty('--sacred-bg', t.bg);
-                root.style.setProperty('--sacred-bg-soft', t.soft);
-                root.style.setProperty('--sacred-border', t.border);
-                
-                // Se o usuário não escolheu uma cor de texto específica, usa a do tema
-                if (!config.customTextColor) {
-                    root.style.setProperty('--sacred-text', t.text);
-                }
-            }
-
-            // Cor de Texto Customizada
-            if (config.customTextColor && colors[config.customTextColor]) {
-                root.style.setProperty('--sacred-text', colors[config.customTextColor]);
-            }
-
-            if (config.fontFamily) {
-                if (config.fontFamily === 'sans') {
-                    root.style.setProperty('--font-main', "'Inter', sans-serif");
-                    root.style.setProperty('--font-title', "'Inter', sans-serif");
-                } else {
-                    root.style.setProperty('--font-main', "'Inter', sans-serif");
-                    root.style.setProperty('--font-title', "'Playfair Display', serif");
-                }
-            }
-        }
-        try {
-            const saved = localStorage.getItem('logos_settings');
-            if (saved) applyLogosTheme(JSON.parse(saved));
-        } catch(e) {}
+        });
     </script>
 <script type="importmap">
 {
@@ -136,6 +101,12 @@
 </script>
 </head>
 <body class="bg-sacred text-sacred">
+    <div id="logos-loader">
+        <div class="loader-ring"></div>
+        <p style="color: #f59e0b; font-family: 'Playfair Display', serif; margin-top: 20px; letter-spacing: 5px; font-weight: bold; text-transform: uppercase; font-size: 10px;">DABAR AI: Invocando o Logos</p>
+    </div>
     <div id="root"></div>
+    <!-- O Netlify precisa que o entry point seja processado corretamente -->
+    <script type="module" src="index.tsx"></script>
 </body>
 </html>

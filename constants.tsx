@@ -1,5 +1,5 @@
 
-import { TheologicalPerspective, Quote, TimelineEvent, Message, ViewMode, StrongEntry } from './types';
+import { TheologicalPerspective, Quote, TimelineEvent, Message, ViewMode, StrongEntry } from './types.ts';
 import { 
   BookOpen, 
   Map as MapIcon, 
@@ -116,52 +116,42 @@ export const STRONGS_DICTIONARY: Record<string, StrongEntry> = {
 };
 
 export const TIMELINE_EVENTS: TimelineEvent[] = [
-  // 1. INOCÊNCIA (Da Criação à Queda)
-  { year: '4004 AC', title: 'Criação do Éden', description: 'Deus estabelece o homem em estado de perfeição original e comunhão direta no Jardim.', category: 'Biblical', dispensation: 'Innocence' },
-  { year: '4004 AC', title: 'A Queda do Homem', description: 'Entrada do pecado no mundo. Promessa do Redentor (Gênesis 3:15).', category: 'Biblical', dispensation: 'Innocence' },
+  // 1. INOCÊNCIA (Gênesis 1:1 - 3:7)
+  { year: '4004 AC', title: 'Criação e o Éden', description: 'Deus estabelece o homem em perfeição. Início da dispensação da Inocência.', category: 'Biblical', dispensation: 'Innocence', covenant: 'Pacto Adâmico' },
+  { year: '4004 AC', title: 'A Queda', description: 'A entrada do pecado e a expulsão do Éden. Promessa do Redentor (Gn 3:15).', category: 'Biblical', dispensation: 'Innocence' },
 
-  // 2. CONSCIÊNCIA (Da Queda ao Dilúvio)
-  { year: '3875 AC', title: 'Caim e Abel', description: 'O primeiro homicídio revela a corrupção da consciência humana sem Deus.', category: 'Biblical', dispensation: 'Conscience' },
-  { year: '3317 AC', title: 'Metusalém', description: 'O homem que mais viveu na história bíblica (969 anos).', category: 'Biblical', dispensation: 'Conscience' },
-  { year: '3017 AC', title: 'Trasladação de Enoque', description: 'Enoque caminha com Deus e é levado para o céu sem ver a morte.', category: 'Biblical', dispensation: 'Conscience' },
+  // 2. CONSCIÊNCIA (Gênesis 3:8 - 8:22)
+  { year: '3875 AC', title: 'Caim e Abel', description: 'O primeiro homicídio revela a corrupção da consciência humana sem o governo divino direto.', category: 'Biblical', dispensation: 'Conscience' },
+  { year: '3017 AC', title: 'Trasladação de Enoque', description: 'Enoque caminha com Deus e é levado, tipificando o arrebatamento.', category: 'Biblical', dispensation: 'Conscience' },
   { year: '2348 AC', title: 'O Grande Dilúvio', description: 'Juízo universal sobre a maldade humana. Preservação da família de Noé.', category: 'Biblical', dispensation: 'Conscience' },
 
-  // 3. GOVERNO HUMANO (Do Dilúvio a Babel)
-  { year: '2347 AC', title: 'Aliança Noética', description: 'Estabelecimento do arco-íris como sinal de que a terra não seria mais destruída por água.', category: 'Biblical', dispensation: 'Human Government' },
-  { year: '2247 AC', title: 'Torre de Babel', description: 'Soberba humana e confusão das línguas. Origem das nações e culturas.', category: 'Biblical', dispensation: 'Human Government' },
-  { year: '2100 AC', title: 'Zigurates Sumérios', description: 'Registros arqueológicos de torres similares à de Babel na Mesopotâmia.', category: 'Archaeological', dispensation: 'Human Government' },
+  // 3. GOVERNO HUMANO (Gênesis 9:1 - 11:32)
+  { year: '2347 AC', title: 'Aliança Noética', description: 'Estabelecimento do Governo Humano e a promessa do arco-íris.', category: 'Biblical', dispensation: 'Human Government', covenant: 'Pacto Noético' },
+  { year: '2247 AC', title: 'Torre de Babel', description: 'Soberba humana e confusão das línguas. Origem das nações.', category: 'Biblical', dispensation: 'Human Government' },
+  { year: '2100 AC', title: 'Zigurates de Ur', description: 'Registros arqueológicos confirmam o desenvolvimento de centros religiosos na Mesopotâmia.', category: 'Archaeological', dispensation: 'Human Government' },
 
-  // 4. PROMESSA (De Abraão ao Egito)
-  { year: '1996 AC', title: 'Chamado de Abraão', description: 'Deus inicia uma linhagem específica através da fé. Promessa de terra e descendência.', category: 'Biblical', dispensation: 'Promise' },
-  { year: '1897 AC', title: 'Juízo sobre Sodoma', description: 'Destruição das cidades da planície devido à corrupção moral extrema.', category: 'Biblical', dispensation: 'Promise' },
-  { year: '1800 AC', title: 'Código de Hamurabi', description: 'Março histórico legal contemporâneo ao período dos patriarcas.', category: 'Historical', dispensation: 'Promise' },
-  { year: '1706 AC', title: 'Israel no Egito', description: 'Jacó e seus filhos descem ao Egito sob a providência de José.', category: 'Biblical', dispensation: 'Promise' },
+  // 4. PROMESSA (Gênesis 12:1 - Êxodo 18:27)
+  { year: '1996 AC', title: 'Chamado de Abraão', description: 'Início da dispensação da Promessa. Deus escolhe um povo.', category: 'Biblical', dispensation: 'Promise', covenant: 'Pacto Abraâmico' },
+  { year: '1850 AC', title: 'Patriarcas em Canaã', description: 'Isaque e Jacó consolidam a herança da terra prometida.', category: 'Biblical', dispensation: 'Promise' },
+  { year: '1706 AC', title: 'José no Egito', description: 'A providência de Deus preserva o povo de Israel durante a fome.', category: 'Biblical', dispensation: 'Promise' },
 
-  // 5. LEI (Do Sinai a Cristo)
-  { year: '1446 AC', title: 'O Êxodo', description: 'Libertação miraculosa de Israel do Egito através das Dez Pragas.', category: 'Biblical', dispensation: 'Law' },
-  { year: '1446 AC', title: 'A Lei no Sinai', description: 'Entrega dos Dez Mandamentos e o sistema sacrificial do Tabernáculo.', category: 'Biblical', dispensation: 'Law' },
-  { year: '1406 AC', title: 'Conquista de Canaã', description: 'Queda de Jericó e estabelecimento das 12 tribos sob Josué.', category: 'Biblical', dispensation: 'Law' },
-  { year: '1208 AC', title: 'Estela de Merneptah', description: 'Primeira menção arqueológica externa da nação de Israel.', category: 'Archaeological', dispensation: 'Law' },
-  { year: '1010 AC', title: 'Império Davídico', description: 'Era de ouro de Israel. Estabelecimento do pacto com a casa de Davi.', category: 'Biblical', dispensation: 'Law' },
-  { year: '960 AC', title: 'Templo de Salomão', description: 'Construção do Primeiro Templo, centro da adoração teocrática.', category: 'Biblical', dispensation: 'Law' },
-  { year: '586 AC', title: 'Exílio Babilônico', description: 'Destruição de Jerusalém por Nabucodonosor. Fim do Reino de Judá.', category: 'Historical', dispensation: 'Law' },
-  { year: '400 AC', title: 'Silêncio Profético', description: 'Período intertestamentário entre Malaquias e João Batista.', category: 'Historical', dispensation: 'Law' },
+  // 5. LEI (Êxodo 19:1 - Atos 1:26)
+  { year: '1446 AC', title: 'O Êxodo e o Sinai', description: 'Entrega da Lei e o Tabernáculo. Israel se torna uma teocracia.', category: 'Biblical', dispensation: 'Law', covenant: 'Pacto Mosaicista' },
+  { year: '1010 AC', title: 'Reino de Davi', description: 'Unificação de Israel e a promessa de um trono eterno para o Messias.', category: 'Biblical', dispensation: 'Law', covenant: 'Pacto Davídico' },
+  { year: '586 AC', title: 'Exílio Babilônico', description: 'Juízo sobre Israel e Judá. Destruição do Primeiro Templo.', category: 'Historical', dispensation: 'Law' },
+  { year: '167 AC', title: 'Revolta Macabeia', description: 'Luta pela purificação do Templo contra a profanação helênica.', category: 'Historical', dispensation: 'Law' },
 
-  // 6. GRAÇA (De Pentecostes ao Arrebatamento)
-  { year: '5 AC', title: 'Nascimento do Logos', description: 'Encarnação de Jesus Cristo em Belém. Cumprimento das profecias.', category: 'Biblical', dispensation: 'Grace' },
-  { year: '30 DC', title: 'A Cruz e Ressurreição', description: 'Obra consumada de redenção. Fim do domínio da Lei e início da Graça.', category: 'Biblical', dispensation: 'Grace' },
-  { year: '30 DC', title: 'Pentecostes', description: 'Descida do Espírito Santo e nascimento da Igreja Primitiva.', category: 'Biblical', dispensation: 'Grace' },
-  { year: '70 DC', title: 'Diáspora Judaica', description: 'Destruição do Segundo Templo por Roma sob o general Tito.', category: 'Historical', dispensation: 'Grace' },
-  { year: '325 DC', title: 'Concílio de Niceia', description: 'Definição doutrinária da divindade de Cristo contra o Arianismo.', category: 'Historical', dispensation: 'Grace' },
-  { year: '1517 DC', title: 'Reforma Protestante', description: 'Resgate das doutrinas da Sola Fide e Sola Scriptura por Lutero.', category: 'Historical', dispensation: 'Grace' },
-  { year: '1947 DC', title: 'Manuscritos de Qumran', description: 'A maior descoberta arqueológica bíblica no Mar Morto.', category: 'Archaeological', dispensation: 'Grace' },
-  { year: '1948 DC', title: 'Renascimento de Israel', description: 'Restauração política de Israel, preparando o cenário escatológico.', category: 'Historical', dispensation: 'Grace' },
+  // 6. GRAÇA (Atos 2:1 - Apocalipse 19:21)
+  { year: '5 AC', title: 'Nascimento de Cristo', description: 'A encarnação do Logos. O cumprimento das profecias messiânicas.', category: 'Biblical', dispensation: 'Grace' },
+  { year: '30 DC', title: 'Morte e Ressurreição', description: 'Consumação da obra redentora. Início da Nova Aliança.', category: 'Biblical', dispensation: 'Grace', covenant: 'Nova Aliança' },
+  { year: '30 DC', title: 'Pentecostes', description: 'Descida do Espírito Santo e nascimento da Igreja.', category: 'Biblical', dispensation: 'Grace' },
+  { year: '1517 DC', title: 'Reforma Protestante', description: 'Resgate da Sola Scriptura e Sola Fide na Europa.', category: 'Historical', dispensation: 'Grace' },
+  { year: '1948 DC', title: 'Restauração de Israel', description: 'Renascimento do Estado de Israel, preparando o cenário escatológico.', category: 'Historical', dispensation: 'Grace' },
 
-  // 7. REINO (Milênio e Eternidade)
-  { year: 'Iminente', title: 'Arrebatamento', description: 'Encontro da Igreja com Cristo nos ares antes da Tribulação.', category: 'Biblical', dispensation: 'Kingdom' },
-  { year: 'Futuro', title: 'Grande Tribulação', description: 'Período de 7 anos de juízos divinos sobre a rebelião humana.', category: 'Biblical', dispensation: 'Kingdom' },
+  // 7. REINO (Apocalipse 20:1 - 20:15)
+  { year: 'Iminente', title: 'O Arrebatamento', description: 'Esperança da Igreja. A remoção dos santos antes da Grande Tribulação.', category: 'Biblical', dispensation: 'Kingdom' },
   { year: 'Futuro', title: 'O Milênio', description: 'Reinado literal de 1000 anos de Cristo sobre a terra a partir de Jerusalém.', category: 'Biblical', dispensation: 'Kingdom' },
-  { year: 'Futuro', title: 'Estado Eterno', description: 'Novos Céus e Nova Terra. Comunhão eterna de Deus com Seu povo.', category: 'Biblical', dispensation: 'Kingdom' }
+  { year: 'Eterno', title: 'Novos Céus e Nova Terra', description: 'A consumação final e a habitação eterna de Deus com o Seu povo.', category: 'Biblical', dispensation: 'Kingdom' }
 ];
 
 export const COMMUNITY_MESSAGES: Message[] = [
