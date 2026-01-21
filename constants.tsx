@@ -1,3 +1,4 @@
+
 import { TheologicalPerspective, Quote, TimelineEvent, Message, ViewMode, StrongEntry } from './types';
 import { 
   BookOpen, 
@@ -79,50 +80,19 @@ export const THEOLOGICAL_PERSPECTIVES: TheologicalPerspective[] = [
   { id: 'patristica', name: 'Patrística', description: 'O pensamento dos Pais da Igreja dos primeiros séculos.', keyPrinciples: ['Ortodoxia', 'Credos Ecumênicos', 'Apostolicidade'], notableFigures: ['Agostinho', 'Irineu'] },
   { id: 'arminiana', name: 'Arminianismo', description: 'Foco no livre-arbítrio e na graça preveniente de Deus.', keyPrinciples: ['Livre Escolha', 'Expiação Ilimitada', 'Resistibilidade'], notableFigures: ['Arminius', 'Wesley'] },
   { id: 'dispensacionalista', name: 'Dispensacionalismo', description: 'Visão da história dividida em eras ou dispensações.', keyPrinciples: ['Distinção Israel/Igreja', 'Arrebatamento', 'Escatologia Literal'], notableFigures: ['Darby', 'Scofield'] },
-  { id: 'luterana', name: 'Luteranismo', description: 'A teologia da cruz e a distinção entre Lei e Evangelho.', keyPrinciples: ['Justificação pela Fé', 'Consubstanciação', 'Dois Reinos'], notableFigures: ['Lutero', 'Melanchthon'] },
-  { id: 'anglicana', name: 'Anglicanismo', description: 'A Via Media entre o catolicismo e o protestantismo.', keyPrinciples: ['Book of Common Prayer', 'Episcopado', 'Liturgia'], notableFigures: ['Cranmer', 'C.S. Lewis'] },
-  { id: 'anabatista', name: 'Anabatismo', description: 'Radicalismo na separação entre Igreja e Estado.', keyPrinciples: ['Credobatismo', 'Pacifismo', 'Comunidade'], notableFigures: ['Menno Simons'] },
-  { id: 'escolastica', name: 'Escolástica', description: 'A síntese entre a foi cristã e a lógica aristotélica.', keyPrinciples: ['Razão e Fé', 'Tomismo', 'Lógica'], notableFigures: ['Tomás de Aquino'] },
-  { id: 'puritanismo', name: 'Puritanismo', description: 'Busca pela pureza doutrinária e piedade extrema.', keyPrinciples: ['Piedade Solene', 'Sabatismo', 'Covenant'], notableFigures: ['John Owen', 'Bunyan'] },
-  { id: 'neoortodoxia', name: 'Neo-Ortodoxia', description: 'Foco no encontro existencial com a Palavra de Deus.', keyPrinciples: ['Transcendência', 'Kerygma', 'Crise'], notableFigures: ['Karl Barth'] },
-  { id: 'wesleyana', name: 'Santidade Wesleyana', description: 'A busca pela perfeição cristã e amor social.', keyPrinciples: ['Inteira Santificação', 'Graça Preveniente', 'Missão'], notableFigures: ['John Wesley'] },
-  { id: 'batista', name: 'Tradição Batista', description: 'Autonomia da igreja local e liberdade religiosa.', keyPrinciples: ['Autonomia Local', 'Imersão', 'Liberdade'], notableFigures: ['Spurgeon', 'Rice'] },
-  { id: 'ortodoxa', name: 'Ortodoxia Oriental', description: 'Foco na Theosis (divinização) e no mistério.', keyPrinciples: ['Theosis', 'Ícones', 'Tradição'], notableFigures: ['Crisóstomo'] },
-  { id: 'pacto', name: 'Teologia do Pacto', description: 'Estrutura a Bíblia através de pactos históricos.', keyPrinciples: ['Pacto da Graça', 'Sinal do Pacto', 'Unidade'], notableFigures: ['Witsius'] },
-  { id: 'exegética', name: 'Teologia Bíblica', description: 'Estudo orgânico da revelação no texto.', keyPrinciples: ['Progressão', 'Tipologia', 'Contexto'], notableFigures: ['Vos'] },
-  { id: 'catolica', name: 'Catolicismo Romano', description: 'Tradição apostólica mediada pelo Magistério.', keyPrinciples: ['Sucessão', 'Sacramentos', 'Igreja'], notableFigures: ['Bento XVI'] },
-  { id: 'carismatica', name: 'Movimento Carismático', description: 'Renovação espiritual focada na experiência.', keyPrinciples: ['Louvor', 'Cura', 'Atualidade'], notableFigures: ['Bennett'] },
-  { id: 'fundamentalista', name: 'Fundamentalismo', description: 'Defesa das doutrinas básicas contra o liberalismo.', keyPrinciples: ['Inerrância', 'Literalismo', 'Virginal'], notableFigures: ['Machen'] },
-  { id: 'contextual', name: 'Teologia Contextual', description: 'Interpretação da fé a partir da realidade social.', keyPrinciples: ['Práxis', 'Libertação', 'Justiça'], notableFigures: ['Gutiérrez'] }
 ];
 
 export const HISTORICAL_QUOTES: Quote[] = [
   { author: 'Charles Spurgeon', text: 'A Bíblia não é a luz do mundo, é a luz da Igreja.', category: 'Bíblia' },
-  { author: 'Charles Spurgeon', text: 'O discernimento não é saber a diferença entre o certo e o errado. É saber a diferença entre o certo e o quase certo.', category: 'Sabedoria' },
-  { author: 'Charles Spurgeon', text: 'Defenda a Bíblia? Eu preferiria defender um leão. Solte-o e ele se defenderá sozinho.', category: 'Bíblia' },
   { author: 'Martinho Lutero', text: 'A Bíblia é uma erva; quanto mais você a manuseia, mais fragrância ela exala.', category: 'Bíblia' },
-  { author: 'Martinho Lutero', text: 'Fé é uma confiança viva e audaciosa na graça de Deus.', category: 'Fé' },
   { author: 'João Calvino', text: 'O coração do homem é uma fábrica de ídolos.', category: 'Coração' },
   { author: 'Santo Agostinho', text: 'Fizeste-nos para Ti, e o nosso coração está inquieto enquanto não descansar em Ti.', category: 'Descanso' },
-  { author: 'C.S. Lewis', text: 'Acredito no cristianismo como acredito que o sol nasceu.', category: 'Fé' },
-  { author: 'C.S. Lewis', text: 'A dor é o megafone de Deus para despertar um mundo surdo.', category: 'Sofrimento' },
-  { author: 'A.W. Tozer', text: 'O que vem à nossa mente quando pensamos sobre Deus é a coisa mais importante.', category: 'Deus' },
-  { author: 'John Wesley', text: 'Faça todo o bem que puder, por todos os meios que puder.', category: 'Santidade' },
-  { author: 'Billy Graham', text: 'Não li o final do livro ainda, mas sei que ganhamos.', category: 'Esperança' }
 ];
 
 export const BIBLE_BOOKS = [
   { name: 'Gênesis', chapters: 50, verses: 1533, testament: 'AT', genre: 'Pentateuco', author: 'Moisés', year: '~1445 AC', position: 1 },
   { name: 'Êxodo', chapters: 40, verses: 1213, testament: 'AT', genre: 'Pentateuco', author: 'Moisés', year: '~1440 AC', position: 2 },
-  { name: 'Levítico', chapters: 27, verses: 859, testament: 'AT', genre: 'Pentateuco', author: 'Moisés', year: '~1445 AC', position: 3 },
-  { name: 'Números', chapters: 36, verses: 1288, testament: 'AT', genre: 'Pentateuco', author: 'Moisés', year: '~1405 AC', position: 4 },
-  { name: 'Deuteronômio', chapters: 34, verses: 959, testament: 'AT', genre: 'Pentateuco', author: 'Moisés', year: '~1405 AC', position: 5 },
   { name: 'Mateus', chapters: 28, verses: 1071, testament: 'NT', genre: 'Evangelho', author: 'Mateus', year: '~60 DC', position: 40 },
-  { name: 'Marcos', chapters: 16, verses: 678, testament: 'NT', genre: 'Evangelho', author: 'Marcos', year: '~55 DC', position: 41 },
-  { name: 'Lucas', chapters: 24, verses: 1151, testament: 'NT', genre: 'Evangelho', author: 'Lucas', year: '~60 DC', position: 42 },
-  { name: 'João', chapters: 21, verses: 879, testament: 'NT', genre: 'Evangelho', author: 'João', year: '~90 DC', position: 43 },
-  { name: 'Atos', chapters: 28, verses: 1007, testament: 'NT', genre: 'Histórico', author: 'Lucas', year: '~62 DC', position: 44 },
-  { name: 'Romanos', chapters: 16, verses: 433, testament: 'NT', genre: 'Epístola', author: 'Paulo', year: '~57 DC', position: 45 },
   { name: 'Apocalipse', chapters: 22, verses: 404, testament: 'NT', genre: 'Profecia', author: 'João', year: '~95 DC', position: 66 },
 ];
 
@@ -142,45 +112,56 @@ export const TRANSLATIONS: Record<string, any> = {
 };
 
 export const STRONGS_DICTIONARY: Record<string, StrongEntry> = {
-  'G3056': { word: 'Logos', original: 'λόγος', pronunciation: 'log-os', number: 'G3056', definition: 'A palavra, o Verbo divino, razão expressa ou o pensamento manifestado através da fala. Em João 1:1, refere-se a Cristo.', etymology: 'Do grego "lego" (falar).' },
-  'H7225': { word: 'Reshit', original: 'רֵאשִׁית', pronunciation: 'ray-sheeth', number: 'H7225', definition: 'Início, primícias, a melhor parte ou o primeiro no tempo, lugar ou ordem. Usado em Gênesis 1:1.', etymology: 'Do hebraico "rosh" (cabeça).' }
+  'G3056': { word: 'Logos', original: 'λόγος', pronunciation: 'log-os', number: 'G3056', definition: 'A palavra, o Verbo divino, razão expressa ou o pensamento manifestado através da fala.', etymology: 'Do grego "lego" (falar).' },
 };
 
 export const TIMELINE_EVENTS: TimelineEvent[] = [
-  // INNOCÊNCIA
-  { year: '4004 AC', title: 'Criação do Cosmos', description: 'Deus cria os céus e a terra e estabelece o homem no Éden em estado de perfeição original.', category: 'Biblical', dispensation: 'Innocence' },
-  
-  // CONSCIÊNCIA
-  { year: '4004 AC', title: 'A Queda do Homem', description: 'A entrada do pecado no mundo e o início da responsabilidade humana através da consciência moral.', category: 'Biblical', dispensation: 'Conscience' },
-  { year: '3875 AC', title: 'Caim e Abel', description: 'O primeiro conflito humano registrado, demonstrando a depravação da consciência após a queda.', category: 'Biblical', dispensation: 'Conscience' },
-  { year: '2348 AC', title: 'O Grande Dilúvio', description: 'Deus purifica a terra através de um dilúvio global, preservando a linhagem de Noé ante a corrupção total.', category: 'Biblical', dispensation: 'Conscience' },
-  
-  // GOVERNO HUMANO
-  { year: '2247 AC', title: 'Torre de Babel', description: 'A rebelião organizada da humanidade e a subsequente confusão das línguas, estabelecendo o governo das nações.', category: 'Biblical', dispensation: 'Human Government' },
-  
-  // PROMESSA
-  { year: '1996 AC', title: 'O Chamado de Abraão', description: 'Deus estabelece um pacto incondicional com Abraão, prometendo uma terra, descendência e bênção universal.', category: 'Biblical', dispensation: 'Promise' },
-  { year: '1898 AC', title: 'José no Egito', description: 'A providência divina movendo a linhagem da promessa para o Egito para preservação durante a fome.', category: 'Biblical', dispensation: 'Promise' },
-  
-  // LEI
-  { year: '1446 AC', title: 'O Êxodo do Egito', description: 'A libertação miraculosa de Israel sob a liderança de Moisés, marcando o nascimento nacional de Israel.', category: 'Biblical', dispensation: 'Law' },
-  { year: '1446 AC', title: 'A Lei no Sinai', description: 'Deus entrega os Dez Mandamentos e o sistema sacrificial, governando a vida teocrática de Israel.', category: 'Biblical', dispensation: 'Law' },
-  { year: '1208 AC', title: 'Estela de Merneptah', description: 'Primeira menção arqueológica de Israel fora da Bíblia, confirmando sua presença em Canaã.', category: 'Archaeological', dispensation: 'Law' },
-  { year: '1010 AC', title: 'Reinado de Davi', description: 'A era de ouro de Israel e o estabelecimento do pacto davídico sobre o trono eterno de Jerusalém.', category: 'Biblical', dispensation: 'Law' },
-  { year: '586 AC', title: 'Queda de Jerusalém', description: 'O exílio babilônico e a destruição do Primeiro Templo como consequência da desobediência à Lei.', category: 'Biblical', dispensation: 'Law' },
-  
-  // GRAÇA
-  { year: '5 AC', title: 'Encarnação do Logos', description: 'O nascimento de Jesus Cristo, o cumprimento de todas as sombras e promessas do Antigo Testamento.', category: 'Biblical', dispensation: 'Grace' },
-  { year: '30 DC', title: 'Crucificação e Ressurreição', description: 'A obra consumada de Cristo, provendo salvação gratuita mediante a fé, encerrando o domínio da Lei.', category: 'Biblical', dispensation: 'Grace' },
-  { year: '30 DC', title: 'Pentecostes', description: 'A descida do Espírito Santo e o início da Igreja, o corpo místico de Cristo composto de judeus e gentios.', category: 'Biblical', dispensation: 'Grace' },
-  { year: '95 DC', title: 'O Apocalipse de João', description: 'O apóstolo João recebe a revelação final sobre o fim dos tempos e a glória futura na ilha de Patmos.', category: 'Biblical', dispensation: 'Grace' },
-  { year: '1517 DC', title: 'Reforma Protestante', description: 'O grande retorno às Escrituras e à doutrina da justificação pela fé sob a liderança de Lutero.', category: 'Historical', dispensation: 'Grace' },
-  { year: '1947 DC', title: 'Manuscritos do Mar Morto', description: 'A descoberta em Qumran que confirmou a precisão milenar na transmissão do texto bíblico.', category: 'Archaeological', dispensation: 'Grace' },
-  
-  // REINO (MILÊNIO)
-  { year: 'Futuro', title: 'A Segunda Vinda', description: 'O retorno glorioso de Cristo em poder para julgar as nações e estabelecer Seu governo literal.', category: 'Biblical', dispensation: 'Kingdom' },
-  { year: 'Futuro', title: 'O Milênio', description: 'O reinado de mil anos de Cristo sobre a terra a partir de Jerusalém, restaurando a criação.', category: 'Biblical', dispensation: 'Kingdom' },
-  { year: 'Eternidade', title: 'Novos Céus e Nova Terra', description: 'A consumação final de todas as coisas e a habitação eterna de Deus com Seu povo glorificado.', category: 'Biblical', dispensation: 'Kingdom' }
+  // 1. INOCÊNCIA (Da Criação à Queda)
+  { year: '4004 AC', title: 'Criação do Éden', description: 'Deus estabelece o homem em estado de perfeição original e comunhão direta no Jardim.', category: 'Biblical', dispensation: 'Innocence' },
+  { year: '4004 AC', title: 'A Queda do Homem', description: 'Entrada do pecado no mundo. Promessa do Redentor (Gênesis 3:15).', category: 'Biblical', dispensation: 'Innocence' },
+
+  // 2. CONSCIÊNCIA (Da Queda ao Dilúvio)
+  { year: '3875 AC', title: 'Caim e Abel', description: 'O primeiro homicídio revela a corrupção da consciência humana sem Deus.', category: 'Biblical', dispensation: 'Conscience' },
+  { year: '3317 AC', title: 'Metusalém', description: 'O homem que mais viveu na história bíblica (969 anos).', category: 'Biblical', dispensation: 'Conscience' },
+  { year: '3017 AC', title: 'Trasladação de Enoque', description: 'Enoque caminha com Deus e é levado para o céu sem ver a morte.', category: 'Biblical', dispensation: 'Conscience' },
+  { year: '2348 AC', title: 'O Grande Dilúvio', description: 'Juízo universal sobre a maldade humana. Preservação da família de Noé.', category: 'Biblical', dispensation: 'Conscience' },
+
+  // 3. GOVERNO HUMANO (Do Dilúvio a Babel)
+  { year: '2347 AC', title: 'Aliança Noética', description: 'Estabelecimento do arco-íris como sinal de que a terra não seria mais destruída por água.', category: 'Biblical', dispensation: 'Human Government' },
+  { year: '2247 AC', title: 'Torre de Babel', description: 'Soberba humana e confusão das línguas. Origem das nações e culturas.', category: 'Biblical', dispensation: 'Human Government' },
+  { year: '2100 AC', title: 'Zigurates Sumérios', description: 'Registros arqueológicos de torres similares à de Babel na Mesopotâmia.', category: 'Archaeological', dispensation: 'Human Government' },
+
+  // 4. PROMESSA (De Abraão ao Egito)
+  { year: '1996 AC', title: 'Chamado de Abraão', description: 'Deus inicia uma linhagem específica através da fé. Promessa de terra e descendência.', category: 'Biblical', dispensation: 'Promise' },
+  { year: '1897 AC', title: 'Juízo sobre Sodoma', description: 'Destruição das cidades da planície devido à corrupção moral extrema.', category: 'Biblical', dispensation: 'Promise' },
+  { year: '1800 AC', title: 'Código de Hamurabi', description: 'Março histórico legal contemporâneo ao período dos patriarcas.', category: 'Historical', dispensation: 'Promise' },
+  { year: '1706 AC', title: 'Israel no Egito', description: 'Jacó e seus filhos descem ao Egito sob a providência de José.', category: 'Biblical', dispensation: 'Promise' },
+
+  // 5. LEI (Do Sinai a Cristo)
+  { year: '1446 AC', title: 'O Êxodo', description: 'Libertação miraculosa de Israel do Egito através das Dez Pragas.', category: 'Biblical', dispensation: 'Law' },
+  { year: '1446 AC', title: 'A Lei no Sinai', description: 'Entrega dos Dez Mandamentos e o sistema sacrificial do Tabernáculo.', category: 'Biblical', dispensation: 'Law' },
+  { year: '1406 AC', title: 'Conquista de Canaã', description: 'Queda de Jericó e estabelecimento das 12 tribos sob Josué.', category: 'Biblical', dispensation: 'Law' },
+  { year: '1208 AC', title: 'Estela de Merneptah', description: 'Primeira menção arqueológica externa da nação de Israel.', category: 'Archaeological', dispensation: 'Law' },
+  { year: '1010 AC', title: 'Império Davídico', description: 'Era de ouro de Israel. Estabelecimento do pacto com a casa de Davi.', category: 'Biblical', dispensation: 'Law' },
+  { year: '960 AC', title: 'Templo de Salomão', description: 'Construção do Primeiro Templo, centro da adoração teocrática.', category: 'Biblical', dispensation: 'Law' },
+  { year: '586 AC', title: 'Exílio Babilônico', description: 'Destruição de Jerusalém por Nabucodonosor. Fim do Reino de Judá.', category: 'Historical', dispensation: 'Law' },
+  { year: '400 AC', title: 'Silêncio Profético', description: 'Período intertestamentário entre Malaquias e João Batista.', category: 'Historical', dispensation: 'Law' },
+
+  // 6. GRAÇA (De Pentecostes ao Arrebatamento)
+  { year: '5 AC', title: 'Nascimento do Logos', description: 'Encarnação de Jesus Cristo em Belém. Cumprimento das profecias.', category: 'Biblical', dispensation: 'Grace' },
+  { year: '30 DC', title: 'A Cruz e Ressurreição', description: 'Obra consumada de redenção. Fim do domínio da Lei e início da Graça.', category: 'Biblical', dispensation: 'Grace' },
+  { year: '30 DC', title: 'Pentecostes', description: 'Descida do Espírito Santo e nascimento da Igreja Primitiva.', category: 'Biblical', dispensation: 'Grace' },
+  { year: '70 DC', title: 'Diáspora Judaica', description: 'Destruição do Segundo Templo por Roma sob o general Tito.', category: 'Historical', dispensation: 'Grace' },
+  { year: '325 DC', title: 'Concílio de Niceia', description: 'Definição doutrinária da divindade de Cristo contra o Arianismo.', category: 'Historical', dispensation: 'Grace' },
+  { year: '1517 DC', title: 'Reforma Protestante', description: 'Resgate das doutrinas da Sola Fide e Sola Scriptura por Lutero.', category: 'Historical', dispensation: 'Grace' },
+  { year: '1947 DC', title: 'Manuscritos de Qumran', description: 'A maior descoberta arqueológica bíblica no Mar Morto.', category: 'Archaeological', dispensation: 'Grace' },
+  { year: '1948 DC', title: 'Renascimento de Israel', description: 'Restauração política de Israel, preparando o cenário escatológico.', category: 'Historical', dispensation: 'Grace' },
+
+  // 7. REINO (Milênio e Eternidade)
+  { year: 'Iminente', title: 'Arrebatamento', description: 'Encontro da Igreja com Cristo nos ares antes da Tribulação.', category: 'Biblical', dispensation: 'Kingdom' },
+  { year: 'Futuro', title: 'Grande Tribulação', description: 'Período de 7 anos de juízos divinos sobre a rebelião humana.', category: 'Biblical', dispensation: 'Kingdom' },
+  { year: 'Futuro', title: 'O Milênio', description: 'Reinado literal de 1000 anos de Cristo sobre a terra a partir de Jerusalém.', category: 'Biblical', dispensation: 'Kingdom' },
+  { year: 'Futuro', title: 'Estado Eterno', description: 'Novos Céus e Nova Terra. Comunhão eterna de Deus com Seu povo.', category: 'Biblical', dispensation: 'Kingdom' }
 ];
 
 export const COMMUNITY_MESSAGES: Message[] = [
