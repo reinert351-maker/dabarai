@@ -10,14 +10,24 @@ export enum ViewMode {
   SETTINGS = 'SETTINGS',
   MY_STUDIES = 'MY_STUDIES',
   LEXICON = 'LEXICON',
-  ACADEMY = 'ACADEMY'
+  ACADEMY = 'ACADEMY',
+  VISION = 'VISION',
+  VOICE = 'VOICE',
+  VARIANTS = 'VARIANTS',
+  ARCHEOLOGY_360 = 'ARCHEOLOGY_360',
+  HARMONY = 'HARMONY',
+  DEBATES = 'DEBATES',
+  NETWORK = 'NETWORK',
+  ATLAS = 'ATLAS',
+  MELOS = 'MELOS',
+  PRISM = 'PRISM'
 }
 
 export interface StudyItem {
   id: string;
   title: string;
   content: string;
-  type: 'Verse' | 'Research' | 'Quote' | 'Note';
+  type: 'Verse' | 'Research' | 'Quote' | 'Note' | 'Variant' | 'Map' | 'Harmony' | 'Debate' | 'Connection' | 'Atlas' | 'Melos' | 'Prism';
   timestamp: string;
 }
 

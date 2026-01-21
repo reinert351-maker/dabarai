@@ -19,7 +19,10 @@ import {
   LogOut,
   Camera,
   User as UserIcon,
-  Upload
+  Upload,
+  BellRing,
+  Smartphone,
+  Mail
 } from 'lucide-react';
 
 interface SettingsProps {
@@ -28,6 +31,19 @@ interface SettingsProps {
   onActionXp?: (amt: number, reason: string) => void;
   onNotify?: (text: string) => void;
 }
+
+const COLOR_PALETTE = [
+  { id: 'amber', name: 'Âmbar', hex: '#f59e0b' },
+  { id: 'gold', name: 'Ouro', hex: '#D4AF37' },
+  { id: 'crimson', name: 'Carmesim', hex: '#e11d48' },
+  { id: 'purple', name: 'Púrpura', hex: '#9333ea' },
+  { id: 'indigo', name: 'Índigo', hex: '#6366f1' },
+  { id: 'sky', name: 'Céu', hex: '#0ea5e9' },
+  { id: 'emerald', name: 'Esmeralda', hex: '#10b981' },
+  { id: 'orange', name: 'Fogo', hex: '#f97316' },
+  { id: 'white', name: 'Luz', hex: '#ffffff' },
+  { id: 'silver', name: 'Prata', hex: '#C0C0C0' }
+];
 
 const Settings: React.FC<SettingsProps> = ({ config, setConfig, onActionXp, onNotify }) => {
   const [isSaving, setIsSaving] = useState(false);
@@ -66,14 +82,6 @@ const Settings: React.FC<SettingsProps> = ({ config, setConfig, onActionXp, onNo
     }, 600);
   };
 
-  const handleConfigureAlerts = () => {
-    onNotify?.("Sincronizando Alertas com o DABAR AI...");
-    setTimeout(() => {
-      onNotify?.("Alertas de Estudo Ativados com Sucesso!");
-      onActionXp?.(10, 'Prontidão Espiritual');
-    }, 1500);
-  };
-
   const deactivateLicense = () => {
     if (confirm("Deseja desativar esta licença? Você precisará da chave novamente para acessar o DABAR AI.")) {
       localStorage.removeItem('dabar_license_key');
@@ -109,96 +117,89 @@ const Settings: React.FC<SettingsProps> = ({ config, setConfig, onActionXp, onNo
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
         
-        {/* COLUNA 1: IDENTIDADE E LICENÇA */}
+        {/* COLUNA 1: IDENTIDADE E PALETA DE MARCA */}
         <div className="bg-sacred-soft/40 border border-sacred rounded-[3.5rem] p-8 md:p-10 shadow-2xl space-y-10">
            <div className="flex items-center gap-4 border-b border-sacred pb-6">
-              <UserIcon className="text-accent" size={24} />
-              <h3 className="font-black text-sacred uppercase tracking-[0.2em] text-sm">Identidade do Estudante</h3>
-           </div>
-
-           <div className="flex flex-col items-center gap-6">
-              <div className="relative group">
-                <div className="w-32 h-32 rounded-[2.5rem] bg-sacred border-2 border-sacred overflow-hidden shadow-2xl group-hover:border-accent transition-all">
-                   {config.profileImage ? (
-                     <img src={config.profileImage} className="w-full h-full object-cover" alt="Perfil" />
-                   ) : (
-                     <div className="w-full h-full flex items-center justify-center text-sacred-soft">
-                        <UserIcon size={48} />
-                     </div>
-                   )}
-                </div>
-                <button 
-                  onClick={() => fileInputRef.current?.click()}
-                  className="absolute -bottom-2 -right-2 w-12 h-12 bg-accent text-sacred rounded-2xl flex items-center justify-center shadow-xl invert hover:scale-110 transition-transform border-4 border-sacred-soft"
-                >
-                   <Camera size={20} />
-                </button>
-                <input 
-                  type="file" 
-                  ref={fileInputRef} 
-                  className="hidden" 
-                  accept="image/*" 
-                  onChange={handleImageUpload} 
-                />
-              </div>
-
-              <div className="w-full space-y-2 text-center">
-                 <input 
-                    type="text" 
-                    value={config.userName || ''} 
-                    onChange={(e) => updateSetting('userName', e.target.value)}
-                    placeholder="Nome do Estudante"
-                    className="w-full bg-sacred border-b border-sacred py-2 text-center font-serif italic text-xl text-sacred focus:outline-none focus:border-accent transition-all"
-                 />
-                 <span className="text-[8px] font-black text-sacred-soft uppercase tracking-widest">Este nome será exibido na Comunidade</span>
-              </div>
-           </div>
-
-           <div className="space-y-6 pt-6 border-t border-sacred">
-              <div className="p-6 bg-emerald-500/10 border border-emerald-500/30 rounded-3xl">
-                 <div className="flex items-center gap-3 mb-2 text-emerald-500">
-                    <Check size={16} />
-                    <span className="text-[10px] font-black uppercase tracking-widest">Ativação Ativa</span>
-                 </div>
-                 <p className="text-xs text-slate-300 font-medium italic">Licença vinculada com sucesso.</p>
-              </div>
-
-              <button 
-                onClick={deactivateLicense}
-                className="w-full flex items-center justify-between p-4 bg-sacred border border-sacred rounded-xl text-rose-500 hover:bg-rose-500/10 transition-all text-[9px] font-black uppercase tracking-widest"
-              >
-                <span>Desvincular Licença</span>
-                <LogOut size={14} />
-              </button>
-           </div>
-        </div>
-
-        {/* COLUNA 2: HERMENÊUTICA & ESTÉTICA */}
-        <div className="bg-sacred-soft/40 border border-sacred rounded-[3.5rem] p-8 md:p-10 shadow-2xl space-y-10">
-           <div className="flex items-center gap-4 border-b border-sacred pb-6">
-              <Type className="text-accent" size={24} />
-              <h3 className="font-black text-sacred uppercase tracking-[0.2em] text-sm">Leitura & Ambiente</h3>
+              <Palette className="text-accent" size={24} />
+              <h3 className="font-black text-sacred uppercase tracking-[0.2em] text-sm">Cores da Identidade</h3>
            </div>
 
            <div className="space-y-6">
               <p className="text-[10px] font-black text-sacred-soft uppercase tracking-widest flex items-center gap-2">
-                 <Eye size={12} /> Temas Visuais
+                 Cor do Ícone e Nome do App
               </p>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-5 gap-2">
+                 {COLOR_PALETTE.map(c => (
+                   <button 
+                    key={c.id} 
+                    onClick={() => updateSetting('brandColor', c.id)}
+                    className={`w-full aspect-square rounded-xl border-2 transition-all flex items-center justify-center ${config.brandColor === c.id ? 'border-white scale-110 shadow-lg' : 'border-sacred'}`}
+                    style={{ backgroundColor: c.hex }}
+                    title={c.name}
+                   >
+                     {config.brandColor === c.id && <Check size={14} className="text-sacred invert" />}
+                   </button>
+                 ))}
+              </div>
+           </div>
+
+           <div className="space-y-6 pt-6 border-t border-sacred">
+              <p className="text-[10px] font-black text-sacred-soft uppercase tracking-widest flex items-center gap-2">
+                 Cor das Fontes e Textos
+              </p>
+              <div className="grid grid-cols-5 gap-2">
+                 {COLOR_PALETTE.map(c => (
+                   <button 
+                    key={c.id} 
+                    onClick={() => updateSetting('customTextColor', c.id)}
+                    className={`w-full aspect-square rounded-xl border-2 transition-all flex items-center justify-center ${config.customTextColor === c.id ? 'border-white scale-110 shadow-lg' : 'border-sacred'}`}
+                    style={{ backgroundColor: c.hex }}
+                    title={c.name}
+                   >
+                     {config.customTextColor === c.id && <Check size={14} className="text-sacred invert" />}
+                   </button>
+                 ))}
+              </div>
+              <button 
+                onClick={() => {updateSetting('customTextColor', null); onNotify?.("Cor de texto restaurada para o padrão do tema.");}}
+                className="w-full py-3 bg-sacred border border-sacred rounded-xl text-[8px] font-black text-sacred-soft uppercase tracking-widest hover:text-white"
+              >
+                Restaurar Padrão do Tema
+              </button>
+           </div>
+           
+           <div className="pt-6 border-t border-sacred flex flex-col items-center">
+              <div className="w-12 h-12 rounded-2xl bg-brand flex items-center justify-center shadow-lg mb-3">
+                 <span className="text-sacred font-black text-xl italic invert">D</span>
+              </div>
+              <h1 className="text-lg font-black text-brand font-divine tracking-tighter uppercase">DABAR AI</h1>
+              <p className="text-[8px] text-sacred-soft font-black uppercase tracking-widest mt-1">Prévia da Identidade</p>
+           </div>
+        </div>
+
+        {/* COLUNA 2: TEMAS & TIPOGRAFIA */}
+        <div className="bg-sacred-soft/40 border border-sacred rounded-[3.5rem] p-8 md:p-10 shadow-2xl space-y-10">
+           <div className="flex items-center gap-4 border-b border-sacred pb-6">
+              <Eye className="text-accent" size={24} />
+              <h3 className="font-black text-sacred uppercase tracking-[0.2em] text-sm">Ambiente & Tipografia</h3>
+           </div>
+
+           <div className="space-y-6">
+              <p className="text-[10px] font-black text-sacred-soft uppercase tracking-widest">Temas do Templo</p>
+              <div className="grid grid-cols-2 gap-3 max-h-48 overflow-y-auto pr-2 no-scrollbar">
                  {Object.entries(THEME_CONFIG.themes).map(([id, t]: [string, any]) => (
                    <button 
                     key={id} 
                     onClick={() => updateSetting('theme', id)}
-                    className={`flex flex-col items-center gap-3 p-4 rounded-2xl border-2 transition-all ${config.theme === id ? 'border-accent bg-accent/5 shadow-inner' : 'border-sacred bg-sacred/50 hover:border-sacred-soft'}`}
+                    className={`flex flex-col items-center gap-2 p-3 rounded-2xl border-2 transition-all ${config.theme === id ? 'border-accent bg-accent/5' : 'border-sacred bg-sacred/50 hover:border-sacred-soft'}`}
                    >
-                      <div className={`w-3 h-3 rounded-full ${config.theme === id ? 'bg-accent shadow-accent' : 'bg-sacred-soft border border-sacred'}`}></div>
                       <span className={`text-[9px] font-black uppercase text-center ${config.theme === id ? 'text-sacred' : 'text-sacred-soft'}`}>{t.name}</span>
                    </button>
                  ))}
               </div>
            </div>
 
-           <div className="space-y-6">
+           <div className="space-y-6 pt-6 border-t border-sacred">
               <p className="text-[10px] font-black text-sacred-soft uppercase tracking-widest">Tipografia do Logos</p>
               <div className="grid grid-cols-2 gap-3">
                  {Object.entries(THEME_CONFIG.fonts).map(([id, f]: [string, any]) => (
@@ -214,24 +215,21 @@ const Settings: React.FC<SettingsProps> = ({ config, setConfig, onActionXp, onNo
               </div>
            </div>
 
-           <div className="space-y-6">
-              <p className="text-[10px] font-black text-sacred-soft uppercase tracking-widest flex items-center gap-2">
-                 <BrainCircuit size={12} /> Motor Inteligente
-              </p>
-              <div className="grid grid-cols-1 gap-3">
+           <div className="space-y-6 pt-6 border-t border-sacred">
+              <p className="text-[10px] font-black text-sacred-soft uppercase tracking-widest">Motor Inteligente</p>
+              <div className="grid grid-cols-1 gap-2">
                  {[
-                   { id: 'pro', name: 'DABAR Pro', desc: 'Pensamento profundo para exegeses.' },
-                   { id: 'flash', name: 'DABAR Flash', desc: 'Velocidade máxima em respostas.' }
+                   { id: 'pro', name: 'DABAR Pro', desc: 'Pensamento profundo.' },
+                   { id: 'flash', name: 'DABAR Flash', desc: 'Velocidade máxima.' }
                  ].map(m => (
                    <button 
                     key={m.id} 
                     onClick={() => updateSetting('aiModel', m.id)}
-                    className={`w-full text-left p-5 rounded-2xl border-2 transition-all flex items-center gap-4 ${m.id === config.aiModel ? 'border-accent bg-accent/5' : 'border-sacred bg-sacred/50'}`}
+                    className={`w-full text-left p-4 rounded-2xl border-2 transition-all flex items-center gap-4 ${m.id === config.aiModel ? 'border-accent bg-accent/5' : 'border-sacred bg-sacred/50'}`}
                    >
-                      <div className={`w-2 h-2 rounded-full ${m.id === config.aiModel ? 'bg-accent shadow-accent' : 'bg-sacred-soft'}`}></div>
+                      <div className={`w-2 h-2 rounded-full ${m.id === config.aiModel ? 'bg-accent' : 'bg-sacred-soft'}`}></div>
                       <div>
-                        <span className={`block text-[10px] font-black uppercase mb-1 ${m.id === config.aiModel ? 'text-sacred' : 'text-sacred-soft'}`}>{m.name}</span>
-                        <span className="text-[8px] text-sacred-soft uppercase tracking-widest opacity-60">{m.desc}</span>
+                        <span className={`block text-[10px] font-black uppercase ${m.id === config.aiModel ? 'text-sacred' : 'text-sacred-soft'}`}>{m.name}</span>
                       </div>
                    </button>
                  ))}
@@ -239,55 +237,54 @@ const Settings: React.FC<SettingsProps> = ({ config, setConfig, onActionXp, onNo
            </div>
         </div>
 
-        {/* COLUNA 3: SISTEMA & MANUTENÇÃO */}
+        {/* COLUNA 3: ALERTAS & MANUTENÇÃO */}
         <div className="bg-sacred-soft/40 border border-sacred rounded-[3.5rem] p-8 md:p-10 shadow-2xl space-y-10">
            <div className="flex items-center gap-4 border-b border-sacred pb-6">
-              <Zap className="text-accent" size={24} />
-              <h3 className="font-black text-sacred uppercase tracking-[0.2em] text-sm">Templo & Idioma</h3>
+              <BellRing className="text-accent" size={24} />
+              <h3 className="font-black text-sacred uppercase tracking-[0.2em] text-sm">Alertas & Sincronia</h3>
            </div>
 
-           <div className="space-y-6">
-              <p className="text-[10px] font-black text-sacred-soft uppercase tracking-widest flex items-center gap-2">
-                 <Languages size={12} /> Idioma do App
-              </p>
-              <div className="grid grid-cols-2 gap-3">
-                 {[
-                   { id: 'pt-br', name: 'Português BR' },
-                   { id: 'en-us', name: 'English US' }
-                 ].map(l => (
-                   <button 
-                    key={l.id} 
-                    onClick={() => updateSetting('language', l.id)}
-                    className={`p-4 rounded-2xl border-2 transition-all ${config.language === l.id ? 'border-accent bg-accent/5' : 'border-sacred bg-sacred/50 hover:border-sacred-soft'}`}
-                   >
-                      <span className={`text-[10px] font-black uppercase text-center block ${config.language === l.id ? 'text-sacred' : 'text-sacred-soft'}`}>{l.name}</span>
-                   </button>
-                 ))}
+           <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-sacred/50 border border-sacred rounded-2xl transition-all">
+                 <div className="flex items-center gap-3">
+                    <Smartphone size={18} className="text-accent" />
+                    <span className="text-[10px] font-black text-sacred uppercase tracking-widest">Estudo Pendente</span>
+                 </div>
+                 <label className="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" checked={config.alertStudies ?? true} onChange={(e) => updateSetting('alertStudies', e.target.checked)} className="sr-only peer" />
+                    <div className="w-11 h-6 bg-sacred-soft peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                 </label>
               </div>
-           </div>
 
-           <div className="space-y-6">
-              <p className="text-[10px] font-black text-sacred-soft uppercase tracking-widest flex items-center gap-2">
-                 <Bell size={12} /> Sincronia de Alertas
-              </p>
-              <div className="bg-sacred/50 border border-sacred p-6 rounded-2xl">
-                 <p className="text-[10px] text-sacred-soft leading-relaxed italic mb-4">
-                    Receba notificações sobre estudos pendentes e descobertas da IA.
-                 </p>
-                 <button 
-                   onClick={handleConfigureAlerts}
-                   className="w-full py-4 bg-sacred border border-accent/20 text-accent rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-accent hover:text-sacred transition-all"
-                 >
-                   Configurar Alertas
-                 </button>
+              <div className="flex items-center justify-between p-4 bg-sacred/50 border border-sacred rounded-2xl transition-all">
+                 <div className="flex items-center gap-3">
+                    <Zap size={18} className="text-amber-500" />
+                    <span className="text-[10px] font-black text-sacred uppercase tracking-widest">Insigths do Mentor</span>
+                 </div>
+                 <label className="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" checked={config.alertInsights ?? true} onChange={(e) => updateSetting('alertInsights', e.target.checked)} className="sr-only peer" />
+                    <div className="w-11 h-6 bg-sacred-soft peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                 </label>
               </div>
+
+              <div className="flex items-center justify-between p-4 bg-sacred/50 border border-sacred rounded-2xl transition-all">
+                 <div className="flex items-center gap-3">
+                    <Mail size={18} className="text-indigo-400" />
+                    <span className="text-[10px] font-black text-sacred uppercase tracking-widest">Destaque Semanal</span>
+                 </div>
+                 <label className="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" checked={config.alertWeekly ?? false} onChange={(e) => updateSetting('alertWeekly', e.target.checked)} className="sr-only peer" />
+                    <div className="w-11 h-6 bg-sacred-soft peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                 </label>
+              </div>
+              <p className="text-[8px] text-sacred-soft uppercase tracking-widest text-center italic mt-2">Os alertas são sincronizados em todos os seus dispositivos.</p>
            </div>
 
-           <div className="pt-6 space-y-4">
+           <div className="pt-6 border-t border-sacred space-y-4">
               <button 
                 onClick={handleSave}
                 disabled={isSaving}
-                className="w-full py-5 bg-accent text-sacred rounded-2xl font-black text-[11px] uppercase tracking-[0.4em] hover:opacity-90 shadow-accent active:scale-95 transition-all flex items-center justify-center gap-4 disabled:opacity-50 invert"
+                className="w-full py-5 bg-brand text-sacred rounded-2xl font-black text-[11px] uppercase tracking-[0.4em] hover:opacity-90 shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-4 disabled:opacity-50 invert"
               >
                 {isSaving ? <Loader2 className="animate-spin" size={20} /> : <Check size={20} />}
                 CONSAGRAR AJUSTES
@@ -295,7 +292,7 @@ const Settings: React.FC<SettingsProps> = ({ config, setConfig, onActionXp, onNo
 
               <button 
                 onClick={factoryReset}
-                className="w-full py-5 bg-sacred border border-sacred text-sacred-soft rounded-2xl font-black text-[11px] uppercase tracking-[0.4em] hover:border-crimson hover:text-crimson transition-all flex items-center justify-center gap-4"
+                className="w-full py-4 bg-sacred border border-sacred text-sacred-soft rounded-2xl font-black text-[11px] uppercase tracking-[0.4em] hover:border-rose-500 hover:text-rose-500 transition-all flex items-center justify-center gap-4"
               >
                 <Trash2 size={20} /> LIMPAR TEMPLO
               </button>

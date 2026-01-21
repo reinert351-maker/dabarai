@@ -1,0 +1,10 @@
+
+{
+  "appId": "com.dabari.logos",
+  "appName": "DABAR AI",
+  "webDir": ".",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  }
+}

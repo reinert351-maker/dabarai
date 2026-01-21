@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { searchBiblicalPlaces } from '../services/gemini';
+import { StudyItem } from '../types';
 import { 
   X, 
   Search, 
@@ -11,27 +12,27 @@ import {
   LocateFixed,
   Compass,
   MapPin,
-  Globe
+  Globe,
+  BookmarkPlus
 } from 'lucide-react';
 
 interface InteractiveMapProps {
   onDeepStudy?: (prompt: string) => void;
+  onSave?: (item: Omit<StudyItem, 'id' | 'timestamp'>) => void;
   onActionXp?: (amt: number, reason: string) => void;
 }
 
-const InteractiveMap: React.FC<InteractiveMapProps> = ({ onDeepStudy, onActionXp }) => {
+const InteractiveMap: React.FC<InteractiveMapProps> = ({ onDeepStudy, onSave, onActionXp }) => {
   const [query, setQuery] = useState('Jerusalém');
   const [isSearching, setIsSearching] = useState(false);
   const [mapData, setMapData] = useState<any>(null);
   const [userLocation, setUserLocation] = useState<{ lat: number, lng: number } | null>(null);
   
-  // URL de embed padrão garantida para Jerusalém
   const [embedUrl, setEmbedUrl] = useState<string>(
     `https://maps.google.com/maps?q=Jerusalém&t=&z=13&ie=UTF8&iwloc=&output=embed&hl=pt-br`
   );
 
   useEffect(() => {
-    // Tenta obter localização do usuário
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
@@ -39,7 +40,6 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ onDeepStudy, onActionXp
       );
     }
     
-    // Dispara a busca automática da IA ao montar para o local padrão
     const initialFetch = async () => {
       setIsSearching(true);
       try {
@@ -59,7 +59,6 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ onDeepStudy, onActionXp
     if (!query.trim() || isSearching) return;
 
     setIsSearching(true);
-    // Atualiza o mapa visual imediatamente
     const encodedPlace = encodeURIComponent(query);
     setEmbedUrl(`https://maps.google.com/maps?q=${encodedPlace}&t=&z=14&ie=UTF8&iwloc=&output=embed&hl=pt-br`);
     
@@ -75,10 +74,18 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ onDeepStudy, onActionXp
     }
   };
 
+  const handleSaveMap = () => {
+    if (mapData && onSave) {
+      onSave({
+        title: `Mapa: ${query}`,
+        content: mapData.text,
+        type: 'Map'
+      });
+    }
+  };
+
   return (
     <div className="flex flex-col h-[calc(100vh-140px)] space-y-6 animate-in fade-in duration-700">
-      
-      {/* HEADER DE BUSCA GEOGRÁFICA */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 shrink-0">
         <div>
           <h2 className="text-2xl md:text-3xl font-black font-serif text-sacred flex items-center gap-3 tracking-tighter uppercase italic">
@@ -110,8 +117,6 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ onDeepStudy, onActionXp
       </div>
 
       <div className="flex-1 flex flex-col lg:flex-row gap-6 overflow-hidden">
-        
-        {/* MAPA EM TEMPO REAL */}
         <div className="flex-[2] bg-sacred-soft rounded-[2rem] md:rounded-[2.5rem] border border-sacred overflow-hidden relative shadow-2xl group min-h-[350px]">
           <iframe
             key={embedUrl}
@@ -133,11 +138,17 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({ onDeepStudy, onActionXp
           </div>
         </div>
 
-        {/* PAINEL DE INFORMAÇÕES IA */}
         <div className="flex-1 bg-sacred-soft/40 rounded-[2rem] md:rounded-[2.5rem] border border-sacred overflow-hidden flex flex-col shadow-xl max-h-full">
-           <div className="p-5 md:p-6 border-b border-sacred bg-sacred-soft flex items-center gap-3">
-              <Compass className="text-accent" size={20} />
-              <h3 className="text-xs font-black text-sacred uppercase tracking-widest">Dossiê DABAR AI</h3>
+           <div className="p-5 md:p-6 border-b border-sacred bg-sacred-soft flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Compass className="text-accent" size={20} />
+                <h3 className="text-xs font-black text-sacred uppercase tracking-widest">Dossiê DABAR AI</h3>
+              </div>
+              {mapData && (
+                <button onClick={handleSaveMap} className="text-accent hover:text-sacred hover:bg-accent p-2 rounded-lg transition-all">
+                  <BookmarkPlus size={20} />
+                </button>
+              )}
            </div>
            
            <div className="flex-1 overflow-y-auto p-6 space-y-6 no-scrollbar">

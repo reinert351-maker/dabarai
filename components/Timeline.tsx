@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { TIMELINE_EVENTS } from '../constants';
-import { TimelineEvent, Source, DispensationType } from '../types';
+import { TimelineEvent, DispensationType, StudyItem } from '../types';
 import { 
   Calendar, 
   ChevronRight, 
@@ -14,11 +14,16 @@ import {
   History,
   Layers,
   BookOpen,
-  ArrowRight
+  ArrowRight,
+  BookmarkPlus,
+  ScrollText,
+  Anchor,
+  SearchCode
 } from 'lucide-react';
 
 interface TimelineProps {
   onDeepStudy?: (prompt: string) => void;
+  onSave?: (item: Omit<StudyItem, 'id' | 'timestamp'>) => void;
 }
 
 const DISPENSATION_INFO: Record<DispensationType, { name: string, color: string, icon: any, startRef: string, endRef: string }> = {
@@ -73,7 +78,7 @@ const DISPENSATION_INFO: Record<DispensationType, { name: string, color: string,
   }
 };
 
-const Timeline: React.FC<TimelineProps> = ({ onDeepStudy }) => {
+const Timeline: React.FC<TimelineProps> = ({ onDeepStudy, onSave }) => {
   const [activeTab, setActiveTab] = useState<'All' | 'Biblical' | 'Historical'>('All');
   const [selectedEventForSources, setSelectedEventForSources] = useState<TimelineEvent | null>(null);
   const [activeDispensation, setActiveDispensation] = useState<DispensationType | 'All'>('All');
@@ -90,6 +95,26 @@ const Timeline: React.FC<TimelineProps> = ({ onDeepStudy }) => {
 
   const closeSources = () => {
     setSelectedEventForSources(null);
+  };
+
+  const handleSaveEvent = (event: TimelineEvent) => {
+    if (onSave) {
+      onSave({
+        title: `Evento: ${event.title} (${event.year})`,
+        content: event.description,
+        type: 'Research'
+      });
+    }
+  };
+
+  const handleSaveSource = (source: any) => {
+    if (onSave && selectedEventForSources) {
+      onSave({
+        title: `Fonte: ${source.title} (${selectedEventForSources.title})`,
+        content: `Referência: ${source.reference}\nEvento: ${selectedEventForSources.title}\nAno: ${selectedEventForSources.year}`,
+        type: 'Research'
+      });
+    }
   };
 
   const renderEvents = () => {
@@ -147,11 +172,16 @@ const Timeline: React.FC<TimelineProps> = ({ onDeepStudy }) => {
                     </span>
                   )}
                 </div>
-                <div className="flex flex-col items-end gap-2">
-                  <span className={`text-[8px] font-black px-3 py-1.5 rounded-xl border ${event.category === 'Biblical' ? 'text-indigo-400 border-indigo-400/20 bg-indigo-400/5' : 'text-emerald-400 border-emerald-400/20 bg-emerald-400/5'} uppercase tracking-widest`}>
-                    {event.category}
-                  </span>
-                  <span className="text-[7px] text-sacred-soft font-black uppercase tracking-widest opacity-50">{event.dispensation}</span>
+                <div className="flex items-center gap-3">
+                   <button onClick={() => handleSaveEvent(event)} className="text-accent hover:text-white transition-all">
+                      <BookmarkPlus size={24} />
+                   </button>
+                   <div className="flex flex-col items-end gap-2">
+                     <span className={`text-[8px] font-black px-3 py-1.5 rounded-xl border ${event.category === 'Biblical' ? 'text-indigo-400 border-indigo-400/20 bg-indigo-400/5' : 'text-emerald-400 border-emerald-400/20 bg-emerald-400/5'} uppercase tracking-widest`}>
+                       {event.category}
+                     </span>
+                     <span className="text-[7px] text-sacred-soft font-black uppercase tracking-widest opacity-50">{event.dispensation}</span>
+                   </div>
                 </div>
               </div>
 
@@ -184,7 +214,6 @@ const Timeline: React.FC<TimelineProps> = ({ onDeepStudy }) => {
 
   return (
     <div className="max-w-6xl mx-auto space-y-16 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-20">
-      
       <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-10 bg-sacred-soft/30 p-10 md:p-16 rounded-[4rem] border border-sacred shadow-2xl relative overflow-hidden">
         <div className="absolute right-0 top-0 opacity-5 pointer-events-none translate-x-1/4 -translate-y-1/4 scale-150">
            <History size={400} />
@@ -198,7 +227,6 @@ const Timeline: React.FC<TimelineProps> = ({ onDeepStudy }) => {
             "Para tudo há uma ocasião certa; há um tempo certo para cada propósito debaixo do céu." — Eclesiastes 3:1
           </p>
         </div>
-        
         <div className="flex flex-col gap-4 relative z-10 shrink-0">
           <div className="flex bg-sacred p-1.5 rounded-2xl border border-sacred shadow-inner">
              {['All', 'Biblical', 'Historical'].map((tab) => (
@@ -211,7 +239,6 @@ const Timeline: React.FC<TimelineProps> = ({ onDeepStudy }) => {
                </button>
              ))}
           </div>
-          
           <select 
             value={activeDispensation}
             onChange={(e) => setActiveDispensation(e.target.value as any)}
@@ -227,74 +254,81 @@ const Timeline: React.FC<TimelineProps> = ({ onDeepStudy }) => {
 
       <div className="relative pb-32">
         <div className="absolute left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-accent/0 via-sacred-soft to-accent/0 hidden md:block"></div>
-
-        <div className="space-y-4">
-          {renderEvents()}
-        </div>
+        <div className="space-y-4">{renderEvents()}</div>
       </div>
-      
+
+      {/* MODAL DE EVIDÊNCIAS E FONTES */}
       {selectedEventForSources && (
-        <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-sacred/95 backdrop-blur-2xl animate-in fade-in duration-300">
-          <div className="bg-sacred-soft border-2 border-sacred w-full max-w-2xl rounded-[3rem] shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
-            <div className="p-8 md:p-10 border-b border-sacred flex justify-between items-center bg-sacred-soft">
-               <div className="flex items-center gap-4">
-                  <Library className="text-accent" size={24} />
-                  <div>
-                    <h3 className="text-xl font-black text-sacred uppercase tracking-tighter leading-none">Scriptorium DABAR</h3>
-                    <p className="text-[9px] font-black text-sacred-soft uppercase tracking-widest mt-1">Fontes: {selectedEventForSources.title}</p>
-                  </div>
-               </div>
-               <button onClick={closeSources} className="p-3 bg-sacred rounded-2xl text-sacred-soft hover:text-sacred hover:bg-sacred-soft border border-sacred transition-all"><X size={20}/></button>
-            </div>
-            
-            <div className="flex-1 overflow-y-auto p-8 space-y-6 no-scrollbar">
-               {selectedEventForSources.sources && selectedEventForSources.sources.length > 0 ? (
-                 <div className="space-y-4">
-                    {selectedEventForSources.sources.map((source, i) => (
-                      <div key={i} className="bg-sacred/40 p-6 rounded-2xl border border-sacred group hover:border-accent/30 transition-all">
-                        <div className="flex items-center justify-between mb-3">
-                           <span className={`text-[8px] font-black px-2 py-1 rounded-md uppercase tracking-widest ${
-                             source.type === 'Biblical' ? 'bg-amber-500/20 text-amber-500' :
-                             source.type === 'Archaeological' ? 'bg-emerald-500/20 text-emerald-500' :
-                             'bg-indigo-500/20 text-indigo-500'
+        <div className="fixed inset-0 z-[500] flex items-center justify-center p-4 bg-sacred/95 backdrop-blur-2xl animate-in fade-in duration-300">
+           <div className="bg-sacred-soft border-2 border-sacred w-full max-w-2xl rounded-[3rem] shadow-[0_50px_100px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col max-h-[85vh]">
+              <div className="p-8 border-b border-sacred flex justify-between items-center bg-sacred/30">
+                 <div className="flex items-center gap-4">
+                    <SearchCode className="text-accent" size={28} />
+                    <div>
+                       <h3 className="text-xl font-black text-sacred uppercase tracking-widest">Dossiê de Evidências</h3>
+                       <p className="text-[10px] font-black text-accent uppercase tracking-[0.2em]">{selectedEventForSources.title}</p>
+                    </div>
+                 </div>
+                 <button onClick={closeSources} className="p-3 bg-sacred rounded-xl text-sacred-soft hover:text-white transition-all"><X size={24} /></button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-8 space-y-6 no-scrollbar">
+                 {selectedEventForSources.sources && selectedEventForSources.sources.length > 0 ? (
+                   selectedEventForSources.sources.map((source, idx) => (
+                     <div key={idx} className="bg-sacred/40 border border-sacred p-6 rounded-2xl group hover:border-accent/40 transition-all relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:scale-110 transition-transform">
+                           {source.type === 'Biblical' ? <BookOpen size={60} /> : <ScrollText size={60} />}
+                        </div>
+                        
+                        <div className="flex items-center justify-between mb-4">
+                           <span className={`px-3 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest border ${
+                             source.type === 'Biblical' ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400' : 
+                             source.type === 'Archaeological' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' :
+                             'bg-accent/10 border-accent/20 text-accent'
                            }`}>
                              {source.type}
                            </span>
-                           <Bookmark size={14} className="text-sacred-soft group-hover:text-accent transition-colors" />
+                           <button 
+                             onClick={() => handleSaveSource(source)}
+                             className="text-sacred-soft hover:text-accent transition-all"
+                             title="Salvar no Scriptorium"
+                           >
+                             <BookmarkPlus size={18} />
+                           </button>
                         </div>
-                        <h4 className="text-sm font-black text-sacred mb-1">{source.title}</h4>
-                        <p className="text-xs text-sacred-soft italic leading-relaxed">"{source.reference}"</p>
-                      </div>
-                    ))}
-                 </div>
-               ) : (
-                 <div className="flex flex-col items-center justify-center py-20 text-center space-y-4 opacity-50">
-                    <QuoteIcon size={48} className="text-sacred-soft" />
-                    <p className="text-sm font-bold uppercase tracking-widest">Nenhuma fonte catalogada manualmente.</p>
-                 </div>
-               )}
+                        
+                        <h4 className="text-lg font-black text-sacred mb-2 uppercase tracking-tighter">{source.title}</h4>
+                        <p className="text-sacred-soft font-serif italic leading-relaxed">{source.reference}</p>
+                     </div>
+                   ))
+                 ) : (
+                   <div className="flex flex-col items-center justify-center py-20 text-center space-y-6 opacity-30">
+                      <Anchor size={48} className="text-sacred-soft" />
+                      <p className="text-sm font-black uppercase tracking-widest">Nenhuma fonte adicional vinculada neste fragmento temporal.</p>
+                   </div>
+                 )}
 
-               <div className="pt-6 border-t border-sacred">
+                 <div className="p-6 bg-accent/5 border border-accent/10 rounded-2xl">
+                    <p className="text-[10px] text-accent/80 font-medium italic leading-relaxed">
+                       "A arqueologia não prova a Bíblia, mas ela certamente remove as pedras do caminho para que possamos ver a verdade histórica sob uma nova luz."
+                    </p>
+                 </div>
+              </div>
+
+              <div className="p-6 border-t border-sacred bg-sacred/30">
                  <button 
                   onClick={() => {
-                    onDeepStudy?.(`Apresente uma bibliografia acadêmica completa e fontes históricas primárias para o evento: ${selectedEventForSources.title} (${selectedEventForSources.year}).`);
+                    onDeepStudy?.(`Realize uma investigação exaustiva sobre as evidências arqueológicas e históricas de: ${selectedEventForSources.title}.`);
                     closeSources();
                   }}
-                  className="w-full py-5 bg-accent text-sacred rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] flex items-center justify-center gap-3 hover:opacity-90 shadow-accent invert"
+                  className="w-full py-5 bg-accent text-sacred rounded-2xl font-black text-xs uppercase tracking-[0.4em] invert shadow-xl hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-3"
                  >
-                    <Sparkles size={18} /> Pesquisa Bibliográfica DABAR
+                    <Sparkles size={20} /> Investigação Profunda IA
                  </button>
-               </div>
-            </div>
-          </div>
+              </div>
+           </div>
         </div>
       )}
-
-      <div className="flex justify-center pt-8">
-         <button className="px-16 py-6 bg-sacred-soft border-2 border-sacred rounded-3xl font-black text-sacred-soft hover:bg-sacred hover:text-sacred hover:border-accent/30 transition-all shadow-2xl uppercase tracking-[0.5em] text-[10px]">
-           Acessar Biblioteca Arqueológica DABAR
-         </button>
-      </div>
     </div>
   );
 };

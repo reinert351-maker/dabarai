@@ -39,15 +39,15 @@ const Layout: React.FC<LayoutProps> = ({ children, activeView, onViewChange, use
   return (
     <div className="flex flex-col h-screen bg-sacred overflow-hidden text-sacred font-reading">
       
-      {/* HEADER DINÂMICO */}
+      {/* HEADER DINÂMICO - Respeita as cores Brand customizadas */}
       <header className="h-20 flex items-center justify-between px-4 md:px-8 bg-sacred-soft/80 border-b border-sacred shrink-0 z-[100] backdrop-blur-xl relative">
         <div className="flex items-center space-x-4 md:space-x-8">
           <div className="flex items-center gap-3 md:gap-4 relative" ref={dropdownRef}>
-            <div className="flex items-center gap-2 md:gap-3">
-              <div className="w-10 h-10 bg-accent rounded-2xl flex items-center justify-center shadow-accent shrink-0">
+            <div className="flex items-center gap-2 md:gap-3 cursor-pointer" onClick={() => handleNavigate(ViewMode.BIBLE)}>
+              <div className="w-10 h-10 bg-brand rounded-2xl flex items-center justify-center shadow-lg shrink-0 transition-all active:scale-95">
                 <span className="text-sacred font-black text-xl italic invert">D</span>
               </div>
-              <h1 className="text-lg md:text-2xl font-black text-accent font-divine tracking-tighter truncate uppercase hidden sm:block">DABAR AI</h1>
+              <h1 className="text-lg md:text-2xl font-black text-brand font-divine tracking-tighter truncate uppercase hidden sm:block">DABAR AI</h1>
             </div>
 
             <button 

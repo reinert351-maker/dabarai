@@ -15,7 +15,8 @@ import {
   Filter,
   Award,
   Quote as QuoteIcon,
-  BookOpen
+  BookOpen,
+  ChevronDown
 } from 'lucide-react';
 import { StudyItem, StrongEntry, Quote } from '../types';
 
@@ -30,15 +31,18 @@ const Lexicon: React.FC<LexiconProps> = ({ onSave, onActionXp }) => {
   const [strongResult, setStrongResult] = useState<StrongEntry | null>(null);
   const [isSearching, setIsSearching] = useState(false);
   const [quoteFilter, setQuoteFilter] = useState('All');
+  const [categoryFilter, setCategoryFilter] = useState('All');
 
   const filteredQuotes = HISTORICAL_QUOTES.filter(q => {
     const matchesSearch = q.author.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           q.text.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesAuthor = quoteFilter === 'All' || q.author === quoteFilter;
-    return matchesSearch && matchesAuthor;
+    const matchesCategory = categoryFilter === 'All' || q.category === categoryFilter;
+    return matchesSearch && matchesAuthor && matchesCategory;
   });
 
   const authors = Array.from(new Set(HISTORICAL_QUOTES.map(q => q.author))).sort();
+  const categories = Array.from(new Set(HISTORICAL_QUOTES.filter(q => q.category).map(q => q.category as string))).sort();
 
   const handleStrongSearch = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -96,7 +100,6 @@ const Lexicon: React.FC<LexiconProps> = ({ onSave, onActionXp }) => {
   return (
     <div className="max-w-7xl mx-auto space-y-8 animate-in fade-in duration-700 pb-20">
       
-      {/* HEADER DO MÓDULO - Layout Simplificado para foco no título */}
       <div className="bg-sacred-soft/40 p-8 md:p-12 rounded-[2.5rem] md:rounded-[3rem] border border-sacred shadow-2xl relative overflow-hidden">
         <div className="relative z-10 text-center space-y-4">
           <h2 className="text-3xl md:text-6xl font-serif font-black text-sacred flex flex-col md:flex-row items-center justify-center gap-2 md:gap-6 uppercase tracking-tighter leading-none italic">
@@ -111,7 +114,6 @@ const Lexicon: React.FC<LexiconProps> = ({ onSave, onActionXp }) => {
         </div>
       </div>
 
-      {/* BARRA DE NAVEGAÇÃO DE ABAS - TOTALMENTE VISÍVEL E CENTRALIZADA */}
       <div className="flex justify-center w-full px-2">
         <div className="bg-sacred-soft border-2 border-sacred p-1.5 rounded-[2rem] flex w-full max-w-2xl shadow-2xl">
            <button
@@ -126,7 +128,7 @@ const Lexicon: React.FC<LexiconProps> = ({ onSave, onActionXp }) => {
              className={`flex-1 flex items-center justify-center gap-3 px-4 py-4 md:py-5 rounded-3xl text-[10px] md:text-xs font-black tracking-widest transition-all ${activeTab === 'Antologia' ? 'bg-accent text-sacred shadow-lg invert scale-[1.02]' : 'text-sacred-soft hover:text-sacred'}`}
            >
              <Award size={18} />
-             ANTOLOGIA DE OURO
+             ANTOLOGIA ({HISTORICAL_QUOTES.length})
            </button>
         </div>
       </div>
@@ -208,8 +210,8 @@ const Lexicon: React.FC<LexiconProps> = ({ onSave, onActionXp }) => {
         </div>
       ) : (
         <div className="space-y-10 animate-in slide-in-from-right-4 duration-500 pt-4">
-           {/* Filtros da Antologia */}
-           <div className="flex flex-col md:flex-row gap-6">
+           
+           <div className="flex flex-col md:flex-row gap-4">
               <div className="relative flex-1 group">
                 <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-sacred-soft group-focus-within:text-accent" size={20} />
                 <input 
@@ -220,19 +222,26 @@ const Lexicon: React.FC<LexiconProps> = ({ onSave, onActionXp }) => {
                   className="w-full bg-sacred-soft border-2 border-sacred rounded-2xl md:rounded-[2rem] pl-14 pr-6 py-4 md:py-5 text-sacred font-bold focus:outline-none focus:border-accent shadow-xl"
                 />
               </div>
-              <div className="relative shrink-0">
+              <div className="flex gap-2">
                  <select 
                    value={quoteFilter}
                    onChange={(e) => setQuoteFilter(e.target.value)}
-                   className="w-full md:w-auto bg-sacred-soft border-2 border-sacred rounded-2xl md:rounded-[2rem] px-8 py-4 md:py-5 text-[10px] font-black uppercase tracking-widest text-sacred appearance-none focus:outline-none focus:border-accent shadow-xl"
+                   className="bg-sacred-soft border-2 border-sacred rounded-2xl px-6 py-4 text-[10px] font-black uppercase tracking-widest text-sacred focus:outline-none focus:border-accent"
                  >
-                    <option value="All">Todos os Pregadores</option>
+                    <option value="All">Todos Autores</option>
                     {authors.map(a => <option key={a} value={a}>{a}</option>)}
+                 </select>
+                 <select 
+                   value={categoryFilter}
+                   onChange={(e) => setCategoryFilter(e.target.value)}
+                   className="bg-sacred-soft border-2 border-sacred rounded-2xl px-6 py-4 text-[10px] font-black uppercase tracking-widest text-sacred focus:outline-none focus:border-accent"
+                 >
+                    <option value="All">Todas Categorias</option>
+                    {categories.map(c => <option key={c} value={c}>{c}</option>)}
                  </select>
               </div>
            </div>
 
-           {/* Grid de Frases Otimizado */}
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {filteredQuotes.map((q, i) => (
                 <div 
@@ -243,6 +252,14 @@ const Lexicon: React.FC<LexiconProps> = ({ onSave, onActionXp }) => {
                       <QuoteIcon size={120} />
                    </div>
                    
+                   <div className="mb-4">
+                      {q.category && (
+                        <span className="text-[8px] font-black text-accent bg-accent/10 px-3 py-1 rounded-full uppercase tracking-widest border border-accent/20">
+                          {q.category}
+                        </span>
+                      )}
+                   </div>
+
                    <div className="flex-1 relative z-10">
                       <p className="text-lg md:text-xl font-serif italic text-sacred leading-relaxed mb-8">
                         "{q.text}"

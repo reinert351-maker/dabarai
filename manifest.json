@@ -1,0 +1,22 @@
+
+{
+  "name": "DABAR AI - O Logos Digital",
+  "short_name": "DABAR AI",
+  "description": "Estudo bíblico e teológico com Inteligência Artificial.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#f59e0b",
+  "icons": [
+    {
+      "src": "https://img.icons8.com/ios-filled/192/f59e0b/holy-bible.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://img.icons8.com/ios-filled/512/f59e0b/holy-bible.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
